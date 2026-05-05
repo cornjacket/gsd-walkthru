@@ -99,39 +99,48 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 | TBD | Pending |
-| FOUND-02 | TBD | Pending |
-| FOUND-03 | TBD | Pending |
-| FOUND-04 | TBD | Pending |
-| CRYP-01 | TBD | Pending |
-| CRYP-02 | TBD | Pending |
-| BODY-01 | TBD | Pending |
-| BODY-02 | TBD | Pending |
-| STRP-01 | TBD | Pending |
-| STRP-02 | TBD | Pending |
-| STRP-03 | TBD | Pending |
-| GHUB-01 | TBD | Pending |
-| GHUB-02 | TBD | Pending |
-| GHUB-03 | TBD | Pending |
-| SHOP-01 | TBD | Pending |
-| SHOP-02 | TBD | Pending |
-| API-01 | TBD | Pending |
-| API-02 | TBD | Pending |
-| API-03 | TBD | Pending |
-| API-04 | TBD | Pending |
-| QUAL-01 | TBD | Pending |
-| QUAL-02 | TBD | Pending |
-| QUAL-03 | TBD | Pending |
-| QUAL-04 | TBD | Pending |
-| DOCS-01 | TBD | Pending |
-| DOCS-02 | TBD | Pending |
-| DOCS-03 | TBD | Pending |
+| FOUND-01 | Phase 1 | Pending |
+| FOUND-02 | Phase 1 | Pending |
+| FOUND-03 | Phase 1 | Pending |
+| FOUND-04 | Phase 1 | Pending |
+| CRYP-01 | Phase 2 | Pending |
+| CRYP-02 | Phase 2 | Pending |
+| BODY-01 | Phase 3 | Pending |
+| BODY-02 | Phase 3 | Pending |
+| STRP-01 | Phase 4 | Pending |
+| STRP-02 | Phase 4 | Pending |
+| STRP-03 | Phase 4 | Pending |
+| GHUB-01 | Phase 5 | Pending |
+| GHUB-02 | Phase 5 | Pending |
+| GHUB-03 | Phase 5 | Pending |
+| SHOP-01 | Phase 5 | Pending |
+| SHOP-02 | Phase 5 | Pending |
+| API-01 | Phase 3 | Pending |
+| API-02 | Phase 2 | Pending |
+| API-03 | Phase 3 | Pending |
+| API-04 | Phase 3 | Pending |
+| QUAL-01 | Phase 6 | Pending |
+| QUAL-02 | Phase 6 | Pending |
+| QUAL-03 | Phase 6 | Pending |
+| QUAL-04 | Phase 6 | Pending |
+| DOCS-01 | Phase 7 | Pending |
+| DOCS-02 | Phase 7 | Pending |
+| DOCS-03 | Phase 7 | Pending |
 
 **Coverage:**
 - v1 requirements: 27 total
-- Mapped to phases: 0
-- Unmapped: 27 ⚠️ (will be filled in by roadmapper)
+- Mapped to phases: 27
+- Unmapped: 0
+
+**Per-phase counts:**
+- Phase 1 (Foundation & Tooling): 4 — FOUND-01, FOUND-02, FOUND-03, FOUND-04
+- Phase 2 (Crypto Core & Error Class): 3 — CRYP-01, CRYP-02, API-02
+- Phase 3 (Body Handling & Public API Surface): 5 — BODY-01, BODY-02, API-01, API-03, API-04
+- Phase 4 (Stripe Provider): 3 — STRP-01, STRP-02, STRP-03
+- Phase 5 (GitHub & Shopify Providers): 5 — GHUB-01, GHUB-02, GHUB-03, SHOP-01, SHOP-02
+- Phase 6 (Integration Tests, Coverage Gate & Negative-Case Audit): 4 — QUAL-01, QUAL-02, QUAL-03, QUAL-04
+- Phase 7 (Documentation & Example App): 3 — DOCS-01, DOCS-02, DOCS-03
 
 ---
 *Requirements defined: 2026-05-04*
-*Last updated: 2026-05-04 after initial definition*
+*Last updated: 2026-05-05 after roadmap creation*
