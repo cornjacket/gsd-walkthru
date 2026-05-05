@@ -1,0 +1,33 @@
+{
+  "name": "express-webhook-validator",
+  "version": "0.0.1",
+  "description": "Express middleware for unified HMAC webhook signature validation (Stripe, GitHub, Shopify)",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "lint": "biome check .",
+    "format": "biome format --write ."
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "express": "4.x || 5.x"
+  },
+  "devDependencies": {}
+}
