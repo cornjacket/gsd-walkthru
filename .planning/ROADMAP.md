@@ -41,7 +41,7 @@ Plans:
 - [x] 01-01-PACKAGE-SCAFFOLD-PLAN.md — package.json + tsconfig + repo shape scaffold
 - [x] 01-02-BUILD-TEST-PLAN.md — tsup build + Vitest test runner wired up
 - [x] 01-03-BIOME-PLAN.md — Biome lint + format configured and verified
-- [ ] 01-04-CI-PLAN.md — GitHub Actions 3×2 Node/Express CI matrix
+- [x] 01-04-CI-PLAN.md — GitHub Actions 3×2 Node/Express CI matrix
 
 ### Phase 2: Crypto Core & Error Class
 **Goal**: A developer reading `src/crypto/` and `src/errors.ts` sees the security primitives every provider will depend on, with no provider knowledge required — and the unit tests that prove those primitives behave correctly ship in the same commits as the code.
