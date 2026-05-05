@@ -39,8 +39,8 @@ Build a TypeScript Express middleware library that unifies HMAC signature valida
 **Plans**: 4 plans
 Plans:
 - [x] 01-01-PACKAGE-SCAFFOLD-PLAN.md — package.json + tsconfig + repo shape scaffold
-- [ ] 01-02-BUILD-TEST-PLAN.md — tsup build + Vitest test runner wired up
-- [ ] 01-03-BIOME-PLAN.md — Biome lint + format configured and verified
+- [x] 01-02-BUILD-TEST-PLAN.md — tsup build + Vitest test runner wired up
+- [x] 01-03-BIOME-PLAN.md — Biome lint + format configured and verified
 - [ ] 01-04-CI-PLAN.md — GitHub Actions 3×2 Node/Express CI matrix
 
 ### Phase 2: Crypto Core & Error Class
