@@ -38,7 +38,7 @@ Build a TypeScript Express middleware library that unifies HMAC signature valida
   5. `npm test` runs and exits 0 on a placeholder smoke test from a fresh checkout, in CI and locally — the test runner (Vitest, unless STACK.md says otherwise) is wired up so every subsequent phase can ship tests alongside its code.
 **Plans**: 4 plans
 Plans:
-- [ ] 01-01-PACKAGE-SCAFFOLD-PLAN.md — package.json + tsconfig + repo shape scaffold
+- [x] 01-01-PACKAGE-SCAFFOLD-PLAN.md — package.json + tsconfig + repo shape scaffold
 - [ ] 01-02-BUILD-TEST-PLAN.md — tsup build + Vitest test runner wired up
 - [ ] 01-03-BIOME-PLAN.md — Biome lint + format configured and verified
 - [ ] 01-04-CI-PLAN.md — GitHub Actions 3×2 Node/Express CI matrix
