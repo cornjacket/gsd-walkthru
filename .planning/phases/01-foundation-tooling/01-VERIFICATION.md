@@ -1,8 +1,9 @@
 ---
 phase: 01-foundation-tooling
 verified: 2026-05-05T22:05:00Z
-status: human_needed
-score: 4/5 must-haves verified (SC#3 awaits human GitHub Actions confirmation)
+human_verified: 2026-05-05T22:15:00Z
+status: passed
+score: 5/5 must-haves verified
 overrides_applied: 0
 re_verification:
   previous_status: none
@@ -21,8 +22,8 @@ requirements_coverage:
     evidence: "package.json exports map points at dist/index.js (ESM), dist/index.cjs (CJS), dist/index.d.ts (types). npm run build emits all three artifacts plus index.d.cts. ESM and CJS consumer imports both succeed with VERSION=0.0.1. tsconfig has target=ES2020 / module=ESNext / moduleResolution=bundler / strict=true / declaration=true / declarationMap=true."
   - id: FOUND-02
     description: "GitHub Actions CI matrix runs tests on Node 20/22/24 x Express 4.x/5.x"
-    status: NEEDS HUMAN
-    evidence: ".github/workflows/test.yml exists with single-job 3x2 matrix [20.x,22.x,24.x] x ['4.21.x','5.x'], fail-fast:false, steps: checkout v4 -> setup-node v4 -> npm ci -> npm install express@<v> -> npm run lint -> npm run build -> npm test. CI green status awaits human verification (SC#3)."
+    status: SATISFIED
+    evidence: ".github/workflows/test.yml exists with single-job 3x2 matrix [20.x,22.x,24.x] x ['4.21.x','5.x'], fail-fast:false, steps: checkout v4 -> setup-node v4 -> npm ci -> npm install express@<v> -> npm run lint -> npm run build -> npm test. CI run 25404471646 on main confirmed: all 6 matrix cells green in 11-15s each. https://github.com/cornjacket/gsd-walkthru/actions/runs/25404471646"
   - id: FOUND-03
     description: "Lint and format configured (Biome or ESLint flat config + Prettier) and enforced in CI"
     status: SATISFIED
