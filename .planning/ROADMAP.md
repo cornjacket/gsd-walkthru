@@ -36,7 +36,12 @@ Build a TypeScript Express middleware library that unifies HMAC signature valida
   3. GitHub Actions CI runs the test job across Node 20, 22, and 24 against both Express 4.x and 5.x and reports green on the default branch.
   4. `npm install` in a fresh consumer project does not pull Express transitively — Express is declared only as a peerDependency for `4.x || 5.x`.
   5. `npm test` runs and exits 0 on a placeholder smoke test from a fresh checkout, in CI and locally — the test runner (Vitest, unless STACK.md says otherwise) is wired up so every subsequent phase can ship tests alongside its code.
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+- [ ] 01-01-PACKAGE-SCAFFOLD-PLAN.md — package.json + tsconfig + repo shape scaffold
+- [ ] 01-02-BUILD-TEST-PLAN.md — tsup build + Vitest test runner wired up
+- [ ] 01-03-BIOME-PLAN.md — Biome lint + format configured and verified
+- [ ] 01-04-CI-PLAN.md — GitHub Actions 3×2 Node/Express CI matrix
 
 ### Phase 2: Crypto Core & Error Class
 **Goal**: A developer reading `src/crypto/` and `src/errors.ts` sees the security primitives every provider will depend on, with no provider knowledge required — and the unit tests that prove those primitives behave correctly ship in the same commits as the code.
@@ -113,7 +118,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Tooling | 0/TBD | Not started | - |
+| 1. Foundation & Tooling | 0/4 | Not started | - |
 | 2. Crypto Core & Error Class | 0/TBD | Not started | - |
 | 3. Body Handling & Public API Surface | 0/TBD | Not started | - |
 | 4. Stripe Provider | 0/TBD | Not started | - |
