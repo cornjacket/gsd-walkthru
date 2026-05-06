@@ -53,7 +53,11 @@ Plans:
   3. A developer can `throw new WebhookValidationError({ reason: 'signature_mismatch', provider, statusCode: 401 })` and inspect a discriminated `reason` field covering at least `signature_mismatch`, `timestamp_too_old`, `missing_header`, and `missing_secret`.
   4. Error instances never serialize signature bytes, secrets, or body content when passed through `JSON.stringify` or `String(err)`.
   5. Unit tests cover `computeHmac`, `timingSafeCompare` (both equal-length match path and length-mismatch safety path), and `WebhookValidationError` (discriminated `reason` cases, no signature/secret/body leakage in serialized form). All tests pass.
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 02-01-CRYPTO-PRIMITIVES-PLAN.md — computeHmac + timingSafeCompare + co-located unit tests under src/crypto/
+- [ ] 02-02-ERROR-CLASS-PLAN.md — WebhookValidationError class with locked { reason, provider, statusCode } shape + co-located unit tests in src/errors.test.ts
+- [ ] 02-03-PUBLIC-BARREL-PLAN.md — extend src/index.ts barrel with 4 new exports (computeHmac, timingSafeCompare, WebhookValidationError, type WebhookValidationReason) + reachability smoke tests
 
 ### Phase 3: Body Handling & Public API Surface
 **Goal**: A developer can import `createWebhookMiddleware` and mount it on an Express route with full TypeScript types, even before any provider is wired up — and the unit tests that pin down raw-body capture, the factory shape, the `req.webhook` discriminated union, and the no-leakage failure path ship in the same commits as the code.
