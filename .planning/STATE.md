@@ -68,7 +68,7 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-None yet.
+- WR-06 (Phase 01) — bump `actions/checkout` and `actions/setup-node` off deprecated Node 20. See `.planning/phases/01-foundation-tooling/01-FOLLOWUP.md`. Deferred; CI green until June 2026.
 
 ### Blockers/Concerns
 
