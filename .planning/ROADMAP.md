@@ -16,8 +16,8 @@ Build a TypeScript Express middleware library that unifies HMAC signature valida
 - Integer phases (1, 2, 3): Planned milestone work
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
-- [ ] **Phase 1: Foundation & Tooling** - TypeScript project scaffold with dual CJS/ESM build, lint/format, a configured test runner (`npm test` works on day one), and Node 20/22/24 x Express 4/5 CI matrix
-- [ ] **Phase 2: Crypto Core & Error Class** - HMAC computation, length-safe constant-time comparison, and the discriminated `WebhookValidationError` class — with unit tests shipping alongside the code
+- [x] **Phase 1: Foundation & Tooling** - TypeScript project scaffold with dual CJS/ESM build, lint/format, a configured test runner (`npm test` works on day one), and Node 20/22/24 x Express 4/5 CI matrix
+- [x] **Phase 2: Crypto Core & Error Class** - HMAC computation, length-safe constant-time comparison, and the discriminated `WebhookValidationError` class — with unit tests shipping alongside the code
 - [ ] **Phase 3: Body Handling & Public API Surface** - Raw-body capture, the `createWebhookMiddleware` factory, full TypeScript types, and safe 401 error responses — with unit tests shipping alongside the code
 - [ ] **Phase 4: Stripe Provider** - Stripe HMAC validation with timestamp tolerance window and multi-`v1=` segment support for secret rotation — with unit tests shipping alongside the code
 - [ ] **Phase 5: GitHub & Shopify Providers** - GitHub SHA-256 validation and Shopify base64-encoded validation with provider metadata exposure — with unit tests shipping alongside the code
@@ -57,7 +57,7 @@ Plans:
 Plans:
 - [x] 02-01-CRYPTO-PRIMITIVES-PLAN.md — computeHmac + timingSafeCompare + co-located unit tests under src/crypto/
 - [x] 02-02-ERROR-CLASS-PLAN.md — WebhookValidationError class with locked { reason, provider, statusCode } shape + co-located unit tests in src/errors.test.ts
-- [ ] 02-03-PUBLIC-BARREL-PLAN.md — extend src/index.ts barrel with 4 new exports (computeHmac, timingSafeCompare, WebhookValidationError, type WebhookValidationReason) + reachability smoke tests
+- [x] 02-03-PUBLIC-BARREL-PLAN.md — extend src/index.ts barrel with 4 new exports (computeHmac, timingSafeCompare, WebhookValidationError, type WebhookValidationReason) + reachability smoke tests
 
 ### Phase 3: Body Handling & Public API Surface
 **Goal**: A developer can import `createWebhookMiddleware` and mount it on an Express route with full TypeScript types, even before any provider is wired up — and the unit tests that pin down raw-body capture, the factory shape, the `req.webhook` discriminated union, and the no-leakage failure path ship in the same commits as the code.
@@ -122,8 +122,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Tooling | 0/4 | Not started | - |
-| 2. Crypto Core & Error Class | 0/TBD | Not started | - |
+| 1. Foundation & Tooling | 4/4 | Complete | 2026-05-05 |
+| 2. Crypto Core & Error Class | 3/3 | Complete | 2026-05-06 |
 | 3. Body Handling & Public API Surface | 0/TBD | Not started | - |
 | 4. Stripe Provider | 0/TBD | Not started | - |
 | 5. GitHub & Shopify Providers | 0/TBD | Not started | - |
