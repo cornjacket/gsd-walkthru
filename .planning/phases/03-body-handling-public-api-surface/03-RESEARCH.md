@@ -1040,27 +1040,39 @@ These directives don't conflict with any of D-01..D-22 — they're orthogonal lo
 | A4 | `webhookErrorHandler()` passes 413 errors through unchanged (does NOT wrap them) and that is the intended behavior | Pattern 4, Pitfall 4 | Low — locked structurally by D-14 (only wraps `WebhookValidationError`). But the planner / discuss-phase may want to surface this as an explicit non-decision in the docs. |
 | A5 | The "generic phrase" in `{ error: <generic>, reason: ... }` (D-15) is `"webhook validation failed"` regardless of status code, vs varying by status (e.g., "unauthorized" / "bad request" / "payload too large") | Pattern 5 | Low — CONTEXT.md `Claude's Discretion` explicitly leaves this open. Recommendation: uniform `"webhook validation failed"` for simplicity; consumers parse `reason` for the discriminated signal. |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Where exactly does the global `declare global { namespace Express { interface Request { ... } } }` block go?**
    - What we know: Pattern 2 above strongly recommends `src/types.ts` (a module file).
-   - What's unclear: D-11 leaves it open between `src/express.d.ts` (ambient) and `src/types.ts` (`declare global` in a module). Recommendation: **`src/types.ts`** because (a) module-file augmentation is the canonical Express community pattern; (b) tsup's existing entry glob (`src/**/*.ts`, `!src/**/*.test.ts`) already captures `.ts` but not `.d.ts` — using `.ts` keeps the entry glob consistent.
-   - Recommendation: planner picks `src/types.ts`. Document in the file's header that consumers don't need to add `/// <reference types="..." />` because the augmentation activates transitively when they import any value from the library.
+   - What's unclear: D-11 leaves it open between `src/express.d.ts` (ambient) and `src/types.ts` (`declare global` in a module).
+   - **RESOLVED:** `src/types.ts` (module file with `declare global`). Reasons: (a) module-file augmentation is the canonical Express community pattern; (b) tsup's existing entry glob (`src/**/*.ts`, `!src/**/*.test.ts`) already captures `.ts` but not `.d.ts` — using `.ts` keeps the entry glob consistent; (c) the augmentation activates transitively when consumers import any value from the library, so no `/// <reference types="..." />` ceremony is needed in their tsconfig.
 
 2. **`rawBodyCapture({ limit })` — does it accept `string` only, `number` only, or both?**
    - What we know: `raw-body`'s `Options.limit` accepts `number | string | null` `[VERIFIED: node_modules/raw-body/index.d.ts:Options]`. CONTEXT.md D-08 says default `'1mb'` (string).
    - What's unclear: D-08 says "configurable via `{ limit }` option" but doesn't pin the type.
-   - Recommendation: `string | number` (delegate to raw-body's parsing). Document `'1mb'` / `'500kb'` examples in JSDoc.
+   - **RESOLVED:** `string | number` (delegate to raw-body's parsing). Document `'1mb'` / `'500kb'` examples in JSDoc.
 
 3. **Should `rawBodyCapture()` filter by content-type?**
    - What we know: CONTEXT.md `Claude's Discretion` lists this as planner-discretion. `express.raw({ type: 'application/json' })` filters; the bare middleware does not.
    - What's unclear: Webhook providers all send JSON, but other content types (e.g., a misconfigured webhook) could trip the size limit too.
-   - Recommendation: capture unconditionally on the route it's mounted on. Per-route mounting (PITFALLS #18) means consumers control what content types reach the middleware. No filter option in v1; revisit if a consumer reports a need.
+   - **RESOLVED:** Capture unconditionally on the route it's mounted on. Per-route mounting (PITFALLS #18) means consumers control what content types reach the middleware. No filter option in v1; revisit if a consumer reports a need.
 
 4. **Does `webhookErrorHandler()` accept any options at all in Phase 3?**
    - What we know: D-14 locks the response shape `{ error, reason }`. CONTEXT.md `Claude's Discretion` mentions varying the generic phrase by status code.
    - What's unclear: Should `webhookErrorHandler({ statusOverride?: number })` exist? Should the generic phrase be customizable?
-   - Recommendation: zero options in Phase 3. Pure factory `webhookErrorHandler()`. If a future need emerges (e.g., "I want my 401s to say 'Forbidden' for branding reasons"), revisit then. Aligns with D-16's minimalist stance.
+   - **RESOLVED:** Zero options in Phase 3. Pure factory `webhookErrorHandler()`. If a future need emerges (e.g., "I want my 401s to say 'Forbidden' for branding reasons"), revisit then. Aligns with D-16's minimalist stance.
+
+## Threat Catalog
+
+> Canonical Phase 3 threat IDs. Plan-level `<threat_model>` blocks should cite these by ID rather than redefining; future phases (4–5) introduce their own `T-4-*` / `T-5-*` IDs without reusing these.
+
+| ID | Threat | Component | Mitigation Locus | Severity |
+|----|--------|-----------|------------------|----------|
+| T-3-01 | Secret/signature/raw-body-byte leakage in error responses or logs | `src/errors.ts`, `src/error-handler.ts`, `src/middleware.ts` | Phase 2 D-11 structural no-leakage on `WebhookValidationError` serialization; Phase 3 D-13/D-14/D-15/D-16 (next(err) delegation, opt-in `webhookErrorHandler`, `{ error, reason }` body shape, library-never-logs) | High |
+| T-3-02 | Pre-validation memory-DoS via oversize request bodies | `src/raw-body/middleware.ts`, `src/raw-body/verify.ts` | D-08 default 1mb `{ limit }` option; `raw-body` returns 413 BEFORE any HMAC computation runs | High |
+| T-3-03 | Fail-open on missing/empty secret at factory call time (PITFALLS #11) | `src/middleware.ts` | Factory throws synchronously inside `createWebhookMiddleware(...)` when `secret` is missing/empty (D-02 pattern, plain `Error` per D-04) | High |
+| T-3-04 | Provider self-registration race or silent double-registration (D-03 side-effect imports) | `src/providers/registry.ts`, `src/providers/{stripe,github,shopify}.ts`, `src/index.ts` | Last-write-wins via `Map.set` semantics; barrel imports each provider exactly once; reachability smokes in `src/index.test.ts` confirm all three names register | Medium |
+| T-3-05 | Library-side observability leakage (any `console.*` / `debug()` call) | All `src/**/*.ts` | D-16 zero-logging stance; per-test `vi.spyOn(console, ...)` assertions on failure paths; structural — no `debug` package dependency | Medium |
 
 ## Environment Availability
 
