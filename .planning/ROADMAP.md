@@ -18,7 +18,7 @@ Build a TypeScript Express middleware library that unifies HMAC signature valida
 
 - [x] **Phase 1: Foundation & Tooling** - TypeScript project scaffold with dual CJS/ESM build, lint/format, a configured test runner (`npm test` works on day one), and Node 20/22/24 x Express 4/5 CI matrix
 - [x] **Phase 2: Crypto Core & Error Class** - HMAC computation, length-safe constant-time comparison, and the discriminated `WebhookValidationError` class — with unit tests shipping alongside the code
-- [ ] **Phase 3: Body Handling & Public API Surface** - Raw-body capture, the `createWebhookMiddleware` factory, full TypeScript types, and safe 401 error responses — with unit tests shipping alongside the code
+- [x] **Phase 3: Body Handling & Public API Surface** - Raw-body capture, the `createWebhookMiddleware` factory, full TypeScript types, and safe 401 error responses — with unit tests shipping alongside the code
 - [ ] **Phase 4: Stripe Provider** - Stripe HMAC validation with timestamp tolerance window and multi-`v1=` segment support for secret rotation — with unit tests shipping alongside the code
 - [ ] **Phase 5: GitHub & Shopify Providers** - GitHub SHA-256 validation and Shopify base64-encoded validation with provider metadata exposure — with unit tests shipping alongside the code
 - [ ] **Phase 6: Integration Tests, Coverage Gate & Negative-Case Audit** - Supertest integration suite across all three providers, enforced >90% coverage gate on core validation logic in CI, and an audit pass that closes any remaining negative-case gaps from Phases 2-5
