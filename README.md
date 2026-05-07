@@ -1,6 +1,6 @@
 # express-webhook-validator
 
-Express middleware for unified HMAC webhook signature validation across **Stripe**, **GitHub**, and **Shopify**.
+Express middleware for unified Hash-based Message Authentication Code (HMAC) webhook signature validation across **Stripe**, **GitHub**, and **Shopify**.
 
 > **Status — v0.0.1 (in development).** Phase 3 of 7 complete: public API surface, raw-body capture, error class, opt-in error handler, and provider registry are shipped and tested. Per-provider signature verification (Stripe in Phase 4; GitHub & Shopify in Phase 5) is currently stubbed — calling `validate()` on a real provider throws `... not yet implemented`. The shape of the consumer API is stable; what's pending is the crypto inside each provider's `validate()`.
 
