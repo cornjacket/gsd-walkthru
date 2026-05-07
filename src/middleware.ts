@@ -28,10 +28,19 @@
 import type { RequestHandler } from 'express';
 import { WebhookValidationError } from './errors.js';
 import { getProvider, listProviders } from './providers/registry.js';
+import type { WebhookMetadata } from './types.js';
 
 export interface CreateWebhookMiddlewareOptions {
   /** The webhook signing secret. Must be non-empty (PITFALLS #11). */
   secret: string;
+  /**
+   * Timestamp tolerance in seconds. Requests with a Stripe-Signature
+   * timestamp older than this value are rejected with reason
+   * 'timestamp_too_old'. Defaults to 300 (5 minutes) when unset.
+   * Only used by providers that enforce a replay window (e.g., Stripe).
+   * @default 300
+   */
+  tolerance?: number;
 }
 
 /**
@@ -76,6 +85,11 @@ export function createWebhookMiddleware(
   }
 
   const secret = options.secret;
+  // STRP-02: resolve tolerance once at factory time so the stripe provider
+  // can enforce its timestamp window. Default of 300 s matches Stripe's
+  // recommended replay window. Providers that do not use a timestamp window
+  // (GitHub, Shopify) receive and ignore this argument.
+  const tolerance = options.tolerance ?? 300;
 
   return (req, _res, next) => {
     // D-07: missing rawBody → malformed_payload validation error.
@@ -90,7 +104,13 @@ export function createWebhookMiddleware(
     }
 
     try {
-      const metadata = provider.validate(req, secret);
+      // Pass tolerance as an optional 3rd argument. The Provider interface
+      // declares validate(req, secret) with 2 params (D-16 — do not widen
+      // the interface); the cast is intentional and localized so that
+      // providers accepting a tolerance argument (Stripe) can receive it
+      // without polluting the shared Provider contract.
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+      const metadata = (provider!.validate as Function).call(provider, req, secret, tolerance) as WebhookMetadata;
       req.webhook = metadata;
       next();
     } catch (err) {
