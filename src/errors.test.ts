@@ -56,6 +56,7 @@ describe('WebhookValidationError', () => {
     'missing_header',
     'missing_secret',
     'malformed_payload',
+    'invalid_signature_format',
   ])('round-trips reason %s via instance.reason', (reason) => {
     const err = new WebhookValidationError({
       reason,
@@ -72,6 +73,17 @@ describe('WebhookValidationError', () => {
       statusCode: 400,
     });
     expect(err.message).toBe('stripe webhook malformed payload');
+  });
+
+  it('auto-derives message for invalid_signature_format (Phase 4 D-05)', () => {
+    const err = new WebhookValidationError({
+      reason: 'invalid_signature_format',
+      provider: 'stripe',
+      statusCode: 401,
+    });
+    expect(err.message).toBe('stripe webhook invalid signature format');
+    expect(err.reason).toBe('invalid_signature_format');
+    expect(err.statusCode).toBe(401);
   });
 
   it('does not leak sample signature/secret/body via JSON.stringify or String()', () => {

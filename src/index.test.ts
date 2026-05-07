@@ -52,6 +52,13 @@ describe('express-webhook-validator', () => {
     expect(reason).toBe('signature_mismatch');
   });
 
+  it("includes 'invalid_signature_format' in re-exported WebhookValidationReason type (Phase 4 D-14)", () => {
+    // Compile-time check: if the new reason is NOT in the union, TypeScript
+    // will error on this assignment. Runtime check confirms the value passes through.
+    const reason: WebhookValidationReason = 'invalid_signature_format';
+    expect(reason).toBe('invalid_signature_format');
+  });
+
   // ─── Phase 3 smokes ────────────────────────────────────────────────────
 
   it('re-exports createWebhookMiddleware (callable from the public barrel)', () => {
