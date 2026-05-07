@@ -14,13 +14,12 @@ A backend developer integrating any supported webhook provider can validate sign
 
 <!-- Shipped and confirmed valuable. -->
 
-(None yet — ship to validate)
+- [x] Validate Stripe webhook signatures with timestamp-window replay protection (configurable, 5-minute default) — Validated in Phase 4: real `stripeProvider.validate()` (HMAC-SHA256, multi-`v1=` rotation, past-only tolerance, JSON-parse-after-HMAC) + 15 unit tests cover SC1–SC4 + D-13 negatives; STRP-01/STRP-02/STRP-03 all green; 86/86 suite passes.
 
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] Validate Stripe webhook signatures with timestamp-window replay protection (configurable, 5-minute default)
 - [ ] Validate GitHub webhook signatures (HMAC-SHA256 of raw body, `X-Hub-Signature-256`)
 - [ ] Validate Shopify webhook signatures (HMAC-SHA256 of raw body, `X-Shopify-Hmac-Sha256`)
 - [ ] Provide a single consistent middleware API shape across all three providers
@@ -75,7 +74,7 @@ A backend developer integrating any supported webhook provider can validate sign
 |----------|-----------|---------|
 | Express-first, not framework-agnostic | Differentiates from existing libraries; tighter ergonomics for the dominant Node web framework | — Pending |
 | Unified middleware shape across providers | Reduces mental overhead vs each SDK's own pattern; this is the project's main DX angle | — Pending |
-| Stripe replay protection on by default; GitHub/Shopify gap documented | Only Stripe signs a timestamp; honest documentation beats false promises | — Pending |
+| Stripe replay protection on by default; GitHub/Shopify gap documented | Only Stripe signs a timestamp; honest documentation beats false promises | Stripe half shipped in Phase 4 (300s default tolerance, configurable, multi-`v1=` rotation); GitHub/Shopify gap documentation pending Phase 5/7 |
 | No built-in delivery-ID dedup store | Pure middleware library; stateful dedup belongs in the user's application | — Pending |
 | Ship runnable example Express app | Portfolio reviewers can clone and run; concrete demos beat abstract claims | — Pending |
 | No vendor SDK dependencies | Keeps footprint small; reinforces "validate without buying into a vendor's whole SDK" positioning | — Pending |
@@ -98,4 +97,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-07 after Phase 3 (Body Handling & Public API Surface) completion — `createWebhookMiddleware` factory, both raw-body capture surfaces, `WebhookMetadata` discriminated union with global `Express.Request` augmentation, opt-in `webhookErrorHandler()`, and a 9-symbol public barrel with side-effect provider registration; 67 tests green across 10 files. Active provider-specific requirements (Stripe/GitHub/Shopify) become validated when Phases 4/5/6 ship.*
+*Last updated: 2026-05-07 after Phase 4 (Stripe Provider) completion — real `stripeProvider.validate()` HMAC-SHA256 implementation with past-only tolerance window (300s default, configurable), multi-`v1=` segment rotation, JSON-parse-after-HMAC ordering; `tolerance?: number` plumbed through `CreateWebhookMiddlewareOptions`; `WebhookValidationReason` widened with `'invalid_signature_format'`. 86 tests green across 11 files (+15 stripe-specific). 5 advisory code-review warnings (NaN tolerance guard, vacuous-pass tests, multi-header reason, dup default 300, parseInt regex) tracked in `04-REVIEW.md` for follow-up. GitHub/Shopify (Phase 5) and integration/coverage (Phase 6) remain.*
