@@ -27,7 +27,7 @@
 // components; logging is the consumer's choice.
 import type { RequestHandler } from 'express';
 import { WebhookValidationError } from './errors.js';
-import { getProvider } from './providers/registry.js';
+import { getProvider, listProviders } from './providers/registry.js';
 
 export interface CreateWebhookMiddlewareOptions {
   /** The webhook signing secret. Must be non-empty (PITFALLS #11). */
@@ -54,19 +54,24 @@ export function createWebhookMiddleware(
   // D-02: synchronous validation at call time, not request time.
   const provider = getProvider(providerName);
   if (!provider) {
-    // Static list of v1 provider names for a helpful error message.
-    // Phase 4/5 REPLACE these entries (they don't add new names), so a
-    // dynamic lookup of registered names from registry.ts is unnecessary
-    // for v1.
-    const known = ['stripe', 'github', 'shopify'].join(', ');
+    // Build the "known providers" list dynamically from the registry so
+    // tests that register fakes (and Phase 4/5 substitutions) are
+    // reflected accurately. Falls back to '(none registered)' when the
+    // registry is empty (e.g., test that cleared the registry without
+    // registering anything).
+    const known = listProviders().join(', ') || '(none registered)';
     throw new Error(
-      `Unknown webhook provider: '${providerName}'. ` + `Registered v1 providers: ${known}.`
+      `Unknown webhook provider: '${providerName}'. ` + `Registered providers: ${known}.`
     );
   }
 
-  // PITFALLS #11 / T-3-03: fail loudly on missing/empty secret.
+  // PITFALLS #11 / T-3-03: fail loudly on missing/empty/whitespace-only
+  // secret. A whitespace-only value almost always indicates a misconfig
+  // (e.g., a placeholder in an env file the dev expected to be replaced)
+  // — surface it at config time instead of letting it produce an opaque
+  // signature_mismatch at request time.
   // D-04: plain Error for config issues, NOT a validation error.
-  if (!options.secret) {
+  if (!options.secret || options.secret.trim().length === 0) {
     throw new Error(`Webhook secret required for provider '${providerName}'`);
   }
 

@@ -32,6 +32,17 @@ export function getProvider(name: string): Provider | undefined {
 }
 
 /**
+ * List the names of all currently-registered providers, sorted
+ * alphabetically. Used by `createWebhookMiddleware` to build a helpful
+ * unknown-provider error message that reflects the actual registry
+ * contents (rather than a hard-coded list that drifts as Phase 4/5
+ * substitute stubs and tests register fakes).
+ */
+export function listProviders(): string[] {
+  return Array.from(registry.keys()).sort();
+}
+
+/**
  * Test-only escape hatch for clearing registry state between cases.
  * Leading-underscore name signals private API; not re-exported from
  * src/index.ts (D-19). Used by Phase 3+ unit tests (D-22) to isolate

@@ -15,7 +15,11 @@ export type StripeWebhook = {
   provider: 'stripe';
   eventId: string;
   timestamp: number;
-  parsed: Record<string, unknown>;
+  // WR-05: typed as `unknown` (not `Record<string, unknown>`) because the
+  // library does not own the JSON parse and cannot guarantee the top-level
+  // shape (object vs. array vs. primitive). Consumers must narrow before
+  // accessing keys.
+  parsed: unknown;
   replayWindowMs: number;
 };
 

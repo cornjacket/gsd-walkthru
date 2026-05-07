@@ -82,7 +82,7 @@ completed: 2026-05-07
 1. **Task 1: Extend src/index.ts barrel + side-effect provider imports (D-19)** - `2b79c48` (feat)
 2. **Task 2: Extend src/index.test.ts reachability smokes + side-effect registration smoke** - `c237192` (test)
 
-**Plan metadata:** `_pending_` (docs: complete 03-07 plan)
+**Plan metadata:** `0866a0b` (docs: complete 03-07 plan)
 
 ## Files Created/Modified
 - `src/index.ts` — Phase 3 final public barrel; 14 named exports + 3 side-effect imports; Biome-clean; `export { type RawBodyOptions, rawBodyCapture }` (type-first per organizeImports)

@@ -73,7 +73,7 @@ completed: 2026-05-07
 1. **Task 1: src/middleware.ts — createWebhookMiddleware factory** - `5ab8120` (feat)
 2. **Task 2: src/middleware.test.ts — factory + handler tests with fake provider** - `7a72b4f` (test)
 
-**Plan metadata:** `_pending_` (docs: complete 03-06 plan)
+**Plan metadata:** `3e00efb` (docs: complete 03-06 plan)
 
 ## Files Created/Modified
 - `src/middleware.ts` — createWebhookMiddleware factory; exports `createWebhookMiddleware` and `CreateWebhookMiddlewareOptions`

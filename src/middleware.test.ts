@@ -73,6 +73,15 @@ describe('createWebhookMiddleware', () => {
     expect(() => createWebhookMiddleware('test-fake', { secret: '' })).toThrow(/secret/i);
   });
 
+  it('throws synchronously on whitespace-only secret with the same message (WR-03)', () => {
+    // A " " / "\n" / "\t" secret is almost always a misconfig (placeholder
+    // env value that wasn't substituted). Reject it at config time with
+    // the same plain-Error message as the empty-secret case.
+    expect(() => createWebhookMiddleware('test-fake', { secret: ' ' })).toThrow(
+      /Webhook secret required for provider 'test-fake'/
+    );
+  });
+
   it('returns a RequestHandler that assigns req.webhook on success path (API-01)', async () => {
     let validateCalledWithSecret: string | undefined;
     _clearRegistryForTesting();

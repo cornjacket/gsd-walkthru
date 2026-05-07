@@ -27,6 +27,9 @@
     "node": ">=20.0.0"
   },
   "license": "MIT",
+  "dependencies": {
+    "raw-body": "^3.0.0"
+  },
   "peerDependencies": {
     "express": "4.x || 5.x"
   },
