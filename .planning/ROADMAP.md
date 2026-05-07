@@ -71,10 +71,10 @@ Plans:
   5. Unit tests cover raw-body capture (mounted before `express.json()` and alongside `express.json({ verify })`), the `createWebhookMiddleware` factory shape, the typed `req.webhook` discriminated union, and the no-leakage assertion on validation failures. All tests pass.
 **Plans**: 7 plans
 Plans:
-- [ ] 03-01-PLAN.md — Wave 0 test infrastructure (tsconfig.test.json + typecheck script + supertest devDeps)
-- [ ] 03-02-PLAN.md — Provider plumbing: Provider interface + registry + 3 stub modules with D-09 branch types & self-registration
-- [ ] 03-03-PLAN.md — Raw-body capture: rawBodyCapture() standalone middleware + captureRawBody verify-callback helper (BODY-01, BODY-02)
-- [ ] 03-04-PLAN.md — Reason-union widening ('malformed_payload') + opt-in webhookErrorHandler() factory (D-17, D-14, D-15)
+- [x] 03-01-PLAN.md — Wave 0 test infrastructure (tsconfig.test.json + typecheck script + supertest devDeps)
+- [x] 03-02-PLAN.md — Provider plumbing: Provider interface + registry + 3 stub modules with D-09 branch types & self-registration
+- [x] 03-03-PLAN.md — Raw-body capture: rawBodyCapture() standalone middleware + captureRawBody verify-callback helper (BODY-01, BODY-02)
+- [x] 03-04-PLAN.md — Reason-union widening ('malformed_payload') + opt-in webhookErrorHandler() factory (D-17, D-14, D-15)
 - [ ] 03-05-PLAN.md — WebhookMetadata union + global Express.Request augmentation + compile-time @ts-expect-error narrowing test (D-11, SC3)
 - [ ] 03-06-PLAN.md — createWebhookMiddleware factory (API-01) + fail-loudly + next(err) delegation + no-leakage tests
 - [ ] 03-07-PLAN.md — Public barrel: extend src/index.ts with Phase 3 exports + side-effect provider imports + reachability smokes (D-19, D-03)
