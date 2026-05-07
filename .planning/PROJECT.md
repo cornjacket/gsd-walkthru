@@ -98,4 +98,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-05 after Phase 1 (Foundation & Tooling) completion — TypeScript scaffold, dual CJS/ESM build via tsup, Vitest test runner, Biome lint/format, and 3×2 Node × Express CI matrix all green on first push.*
+*Last updated: 2026-05-07 after Phase 3 (Body Handling & Public API Surface) completion — `createWebhookMiddleware` factory, both raw-body capture surfaces, `WebhookMetadata` discriminated union with global `Express.Request` augmentation, opt-in `webhookErrorHandler()`, and a 9-symbol public barrel with side-effect provider registration; 67 tests green across 10 files. Active provider-specific requirements (Stripe/GitHub/Shopify) become validated when Phases 4/5/6 ship.*
