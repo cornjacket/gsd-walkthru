@@ -88,7 +88,11 @@ Plans:
   2. A request whose `t=` timestamp is older than the configured tolerance is rejected with `reason: 'timestamp_too_old'`, and the tolerance defaults to 300 seconds when unset.
   3. A `Stripe-Signature` header containing multiple `v1=` segments validates successfully when at least one segment matches — supporting Stripe secret rotation.
   4. Unit tests cover Stripe signature validation (happy path), tampered-body rejection, the configurable timestamp tolerance window including replay rejection outside the window, and multi-`v1=` segment matching for secret rotation. All tests pass.
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 04-01-PLAN.md — Widen WebhookValidationReason with 'invalid_signature_format' + errors and index test extensions
+- [ ] 04-02-PLAN.md — Add tolerance option to CreateWebhookMiddlewareOptions + factory closure resolution
+- [ ] 04-03-PLAN.md — Real stripeProvider.validate() implementation + co-located unit tests (D-12 + D-13)
 
 ### Phase 5: GitHub & Shopify Providers
 **Goal**: A developer mounting GitHub or Shopify middleware gets validation that uses the right header, the right encoding, and exposes the metadata they need for downstream dedup — and the unit tests that pin down each provider's correct-header / wrong-header / wrong-encoding behavior and metadata exposure ship in the same commits as the code.
@@ -133,7 +137,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 1. Foundation & Tooling | 4/4 | Complete | 2026-05-05 |
 | 2. Crypto Core & Error Class | 3/3 | Complete | 2026-05-06 |
 | 3. Body Handling & Public API Surface | 0/7 | Not started | - |
-| 4. Stripe Provider | 0/TBD | Not started | - |
+| 4. Stripe Provider | 0/3 | In progress | - |
 | 5. GitHub & Shopify Providers | 0/TBD | Not started | - |
 | 6. Integration Tests, Coverage Gate & Negative-Case Audit | 0/TBD | Not started | - |
 | 7. Documentation & Example App | 0/TBD | Not started | - |
