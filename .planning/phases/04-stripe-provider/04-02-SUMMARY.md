@@ -122,3 +122,10 @@ None - no external service configuration required.
 ---
 *Phase: 04-stripe-provider*
 *Completed: 2026-05-07*
+
+## Self-Check: PASSED
+
+- FOUND: `src/middleware.ts`
+- FOUND: `.planning/phases/04-stripe-provider/04-02-SUMMARY.md`
+- FOUND: commit `65e47e9` (feat task)
+- FOUND: commit `77135bb` (docs/metadata)
