@@ -14,10 +14,7 @@ describe('captureRawBody', () => {
     });
 
     const body = '{"id":"evt_test","type":"charge.succeeded"}';
-    const res = await request(app)
-      .post('/wh')
-      .set('content-type', 'application/json')
-      .send(body);
+    const res = await request(app).post('/wh').set('content-type', 'application/json').send(body);
 
     expect(res.status).toBe(200);
     expect(Buffer.isBuffer(captured)).toBe(true);
