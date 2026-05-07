@@ -76,7 +76,7 @@ Plans:
 - [x] 03-03-PLAN.md — Raw-body capture: rawBodyCapture() standalone middleware + captureRawBody verify-callback helper (BODY-01, BODY-02)
 - [x] 03-04-PLAN.md — Reason-union widening ('malformed_payload') + opt-in webhookErrorHandler() factory (D-17, D-14, D-15)
 - [x] 03-05-PLAN.md — WebhookMetadata union + global Express.Request augmentation + compile-time @ts-expect-error narrowing test (D-11, SC3)
-- [ ] 03-06-PLAN.md — createWebhookMiddleware factory (API-01) + fail-loudly + next(err) delegation + no-leakage tests
+- [x] 03-06-PLAN.md — createWebhookMiddleware factory (API-01) + fail-loudly + next(err) delegation + no-leakage tests
 - [ ] 03-07-PLAN.md — Public barrel: extend src/index.ts with Phase 3 exports + side-effect provider imports + reachability smokes (D-19, D-03)
 
 ### Phase 4: Stripe Provider
