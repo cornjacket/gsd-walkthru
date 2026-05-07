@@ -1,12 +1,13 @@
 // Discriminated reason union for webhook signature validation failures.
-// Phase 2 ships exactly the 4 reasons mandated by ROADMAP success criterion 3.
-// Each later phase widens this union in the SAME commit that ships the test
+// Phase 2 shipped 4 reasons; Phase 3 adds malformed_payload (D-17).
+// Each phase widens this union in the SAME commit that ships the test
 // exercising the new reason. Phase 2 D-07 — DO NOT pre-add reasons.
 export type WebhookValidationReason =
   | 'signature_mismatch'
   | 'timestamp_too_old'
   | 'missing_header'
-  | 'missing_secret';
+  | 'missing_secret'
+  | 'malformed_payload';
 
 /**
  * Deterministic message lookup. Consumes only `reason` and `provider`;
