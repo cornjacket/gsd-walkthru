@@ -1,9 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import {
-  _clearRegistryForTesting,
-  getProvider,
-  registerProvider,
-} from './registry.js';
+import { _clearRegistryForTesting, getProvider, registerProvider } from './registry.js';
 import type { Provider } from './types.js';
 
 // Pitfall 2: this file imports './registry.js' directly — NOT via
