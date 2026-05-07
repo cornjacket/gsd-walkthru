@@ -1,4 +1,4 @@
-# Daily plan — 2026-05-08
+# Daily plan — 2026-05-07
 
 Close out Phase 3 review findings, then open Phase 4 (Stripe provider) at the
 discuss step. Push the rebased main first thing — 50 local commits are sitting
@@ -25,5 +25,4 @@ Notes:
 - **WR-02..WR-06**: fold quick wins (provider-list-from-registry, secret trim,
   `parsed: unknown`) into the BL-01 commit; defer the rest into Phase 4 context.
 - **No plan-phase today**: Phase 4 planning runs Monday on a clean review board.
-- **EOD signoff**: write Monday's plan into `daily-plan.md` (Friday writes
-  forward through the weekend tolerance window).
+- **EOD signoff**: write Friday's plan (2026-05-08) into `daily-plan.md`.
