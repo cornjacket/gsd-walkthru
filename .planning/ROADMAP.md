@@ -92,7 +92,7 @@ Plans:
 Plans:
 - [x] 04-01-PLAN.md — Widen WebhookValidationReason with 'invalid_signature_format' + errors and index test extensions
 - [x] 04-02-PLAN.md — Add tolerance option to CreateWebhookMiddlewareOptions + factory closure resolution
-- [ ] 04-03-PLAN.md — Real stripeProvider.validate() implementation + co-located unit tests (D-12 + D-13)
+- [x] 04-03-PLAN.md — Real stripeProvider.validate() implementation + co-located unit tests (D-12 + D-13)
 
 ### Phase 5: GitHub & Shopify Providers
 **Goal**: A developer mounting GitHub or Shopify middleware gets validation that uses the right header, the right encoding, and exposes the metadata they need for downstream dedup — and the unit tests that pin down each provider's correct-header / wrong-header / wrong-encoding behavior and metadata exposure ship in the same commits as the code.
