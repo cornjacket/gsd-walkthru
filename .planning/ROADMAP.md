@@ -77,7 +77,7 @@ Plans:
 - [x] 03-04-PLAN.md — Reason-union widening ('malformed_payload') + opt-in webhookErrorHandler() factory (D-17, D-14, D-15)
 - [x] 03-05-PLAN.md — WebhookMetadata union + global Express.Request augmentation + compile-time @ts-expect-error narrowing test (D-11, SC3)
 - [x] 03-06-PLAN.md — createWebhookMiddleware factory (API-01) + fail-loudly + next(err) delegation + no-leakage tests
-- [ ] 03-07-PLAN.md — Public barrel: extend src/index.ts with Phase 3 exports + side-effect provider imports + reachability smokes (D-19, D-03)
+- [x] 03-07-PLAN.md — Public barrel: extend src/index.ts with Phase 3 exports + side-effect provider imports + reachability smokes (D-19, D-03)
 
 ### Phase 4: Stripe Provider
 **Goal**: A developer pointing a Stripe webhook at the middleware gets correct, replay-resistant validation with one line of mounting code — and the unit tests that pin down the happy path, tampered-body rejection, the timestamp window, and multi-`v1=` rotation behavior ship in the same commits as the code.
