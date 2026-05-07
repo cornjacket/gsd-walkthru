@@ -87,7 +87,7 @@ Each task was committed atomically following TDD RED → GREEN:
 1. **Task 1 RED: rawBodyCapture middleware tests** - `d6baf24` (test)
 2. **Task 1 GREEN: rawBodyCapture middleware implementation** - `5504c4c` (feat)
 3. **Task 2 RED: captureRawBody verify-helper tests** - `c993e1a` (test)
-4. **Task 2 GREEN: captureRawBody verify-helper implementation** - `6c8462d` (feat)
+4. **Task 2 GREEN: captureRawBody verify-helper implementation** - `602a590` (feat)
 5. **Supertest devDependency addition** - `26e3993` (chore)
 
 ## Files Created/Modified

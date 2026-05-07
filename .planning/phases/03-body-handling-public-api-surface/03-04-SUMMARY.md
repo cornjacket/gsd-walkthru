@@ -78,8 +78,8 @@ completed: 2026-05-07
 
 ## Task Commits
 
-1. **Task 1: Widen WebhookValidationReason with 'malformed_payload' (D-17)** - `2e0ecda` (feat)
-2. **Task 2: webhookErrorHandler() 4-arg error middleware factory + tests** - `3912135` (feat)
+1. **Task 1: Widen WebhookValidationReason with 'malformed_payload' (D-17)** - `2118668` (feat)
+2. **Task 2: webhookErrorHandler() 4-arg error middleware factory + tests** - `0726f82` (feat)
 
 ## Files Created/Modified
 
@@ -131,5 +131,5 @@ All created files confirmed present:
 - `.planning/phases/03-body-handling-public-api-surface/03-04-SUMMARY.md` — FOUND
 
 All task commits confirmed in git log:
-- `2e0ecda` — FOUND
-- `3912135` — FOUND
+- `2118668` — FOUND
+- `0726f82` — FOUND

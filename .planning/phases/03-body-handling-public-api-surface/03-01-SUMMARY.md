@@ -75,7 +75,7 @@ completed: "2026-05-07"
 Each task was committed atomically:
 
 1. **Task 1: Create tsconfig.test.json and add typecheck script** - `a24c5a0` (chore)
-2. **Task 2: Install supertest and @types/supertest as devDependencies** - `26079ff` (chore)
+2. **Task 2: Install supertest and @types/supertest as devDependencies** - `c0b38c8` (chore)
 
 **Plan metadata:** committed with SUMMARY.md (docs: complete plan)
 
@@ -117,7 +117,7 @@ No commits were made to the main repo; all commits landed correctly on `worktree
 - [x] `tsconfig.test.json` exists in worktree — FOUND
 - [x] `package.json` modified with typecheck script and supertest — FOUND
 - [x] Commit `a24c5a0` exists — FOUND
-- [x] Commit `26079ff` exists — FOUND
+- [x] Commit `c0b38c8` exists — FOUND
 - [x] `npm run typecheck` exits 0 — PASS
 - [x] `npm test` 20/20 tests pass — PASS
 

@@ -84,7 +84,7 @@ Each task was committed atomically:
 1. **Task 1: src/types.ts — WebhookMetadata union + global Express.Request augmentation** - `5c05255` (feat)
 2. **Task 2: src/types.test.ts — compile-time discriminated-union narrowing test (SC3)** - `35edeb2` (test)
 
-**Plan metadata:** `ba9e0c8` (docs)
+**Plan metadata:** `286143b` (docs)
 
 ## Files Created/Modified
 

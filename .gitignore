@@ -7,3 +7,6 @@ npm-debug.log*
 .env.local
 coverage/
 *.tgz
+
+# Per-user Claude Code overrides (Claude Code merges this with .claude/settings.json at runtime)
+.claude/settings.local.json
