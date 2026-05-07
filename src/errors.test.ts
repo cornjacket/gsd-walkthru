@@ -55,13 +55,23 @@ describe('WebhookValidationError', () => {
     'timestamp_too_old',
     'missing_header',
     'missing_secret',
+    'malformed_payload',
   ])('round-trips reason %s via instance.reason', (reason) => {
     const err = new WebhookValidationError({
       reason,
       provider: 'stripe',
-      statusCode: 401,
+      statusCode: reason === 'malformed_payload' ? 400 : 401,
     });
     expect(err.reason).toBe(reason);
+  });
+
+  it('auto-derives a human-readable message for malformed_payload (D-17)', () => {
+    const err = new WebhookValidationError({
+      reason: 'malformed_payload',
+      provider: 'stripe',
+      statusCode: 400,
+    });
+    expect(err.message).toBe('stripe webhook malformed payload');
   });
 
   it('does not leak sample signature/secret/body via JSON.stringify or String()', () => {
@@ -69,6 +79,20 @@ describe('WebhookValidationError', () => {
       reason: 'signature_mismatch',
       provider: 'stripe',
       statusCode: 401,
+    });
+    const json = JSON.stringify(err);
+    const str = String(err);
+    for (const leak of [SAMPLE_SIGNATURE, SAMPLE_SECRET, SAMPLE_BODY]) {
+      expect(json).not.toContain(leak);
+      expect(str).not.toContain(leak);
+    }
+  });
+
+  it('does not leak sample signature/secret/body for malformed_payload reason (D-11 + D-17)', () => {
+    const err = new WebhookValidationError({
+      reason: 'malformed_payload',
+      provider: 'stripe',
+      statusCode: 400,
     });
     const json = JSON.stringify(err);
     const str = String(err);
