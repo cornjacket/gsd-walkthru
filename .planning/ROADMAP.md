@@ -90,8 +90,8 @@ Plans:
   4. Unit tests cover Stripe signature validation (happy path), tampered-body rejection, the configurable timestamp tolerance window including replay rejection outside the window, and multi-`v1=` segment matching for secret rotation. All tests pass.
 **Plans**: 3 plans
 Plans:
-- [ ] 04-01-PLAN.md — Widen WebhookValidationReason with 'invalid_signature_format' + errors and index test extensions
-- [ ] 04-02-PLAN.md — Add tolerance option to CreateWebhookMiddlewareOptions + factory closure resolution
+- [x] 04-01-PLAN.md — Widen WebhookValidationReason with 'invalid_signature_format' + errors and index test extensions
+- [x] 04-02-PLAN.md — Add tolerance option to CreateWebhookMiddlewareOptions + factory closure resolution
 - [ ] 04-03-PLAN.md — Real stripeProvider.validate() implementation + co-located unit tests (D-12 + D-13)
 
 ### Phase 5: GitHub & Shopify Providers
