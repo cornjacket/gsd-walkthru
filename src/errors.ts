@@ -1,5 +1,6 @@
 // Discriminated reason union for webhook signature validation failures.
 // Phase 2 shipped 4 reasons; Phase 3 adds malformed_payload (D-17).
+// Phase 4 adds invalid_signature_format (D-05) — Stripe header unparseable / no v1= segment.
 // Each phase widens this union in the SAME commit that ships the test
 // exercising the new reason. Phase 2 D-07 — DO NOT pre-add reasons.
 export type WebhookValidationReason =
@@ -7,7 +8,8 @@ export type WebhookValidationReason =
   | 'timestamp_too_old'
   | 'missing_header'
   | 'missing_secret'
-  | 'malformed_payload';
+  | 'malformed_payload'
+  | 'invalid_signature_format';
 
 /**
  * Deterministic message lookup. Consumes only `reason` and `provider`;
