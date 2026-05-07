@@ -35,6 +35,28 @@ This repo is monitored by [`ai-project-status`](https://github.com/cornjacket/ai
 
 4. **Announce every `log.md` edit.** Immediately after appending a new entry or back-filling a hash, output the literal string `📝 log.md updated` on its own line in chat. Silent edits do not count as a record of work — without the announcement, log activity is invisible inside long tool-call sequences.
 
+<!--
+  TODO: Rule 5 is a candidate for removal. ai-project-status only needs log.md
+  discipline (rules 1–4); how a tracked repo announces commits in chat is a
+  per-project Claude-Code-ergonomics concern and arguably belongs in each
+  repo's own CLAUDE.md, not in a block injected by this meta-repo.
+-->
 5. **Announce every commit.** Immediately after creating a commit, output the literal string `✅ commit <short-hash>` on its own line in chat. This makes commits scannable in the transcript without scrolling tool calls.
+
+## Daily plan (daily-plan.md)
+
+`daily-plan.md` is a **forward-looking** companion to `log.md`, also at the repo root. It captures the intent for one working day. ai-project-status aggregates every tracked repo's `daily-plan.md` into [`daily-plan-summary.md`](https://github.com/cornjacket/ai-project-status/blob/main/daily-plan-summary.md).
+
+### Rules
+
+1. **Single-day scope.** The file represents *one* day's plan. It is **always overwritten**, never appended. History of what actually happened lives in `log.md` and `summary.md`.
+
+2. **Header carries the date.** The first line MUST be `# Daily plan — YYYY-MM-DD`, where the date is the day the plan is *for*. The aggregator parses this to detect stale plans; an unparseable header is treated as stale.
+
+3. **Body is a 100-ft view.** One short paragraph or list of intent, plus a small ASCII diagram (timeline, flow, milestones) that conveys the shape of the day at a glance. Don't write granular tasks — `log.md` records granularity after the fact.
+
+4. **End-of-session sign-off rule.** When the user signals end-of-day or signoff, confirm tomorrow's plan with them and overwrite `daily-plan.md` with it. If today is Friday, write Monday's plan (the aggregator's weekend tolerance keeps the Friday-written-on-Friday plan valid through the weekend; Monday's plan is what's needed for Monday).
+
+5. **Start-of-session safety net.** A `SessionStart` hook (installed at `.claude/hooks/check-daily-plan.py`) checks `daily-plan.md` freshness against today's most-recent-weekday. If stale or missing, it injects a prompt instructing you to ask the user for today's plan and overwrite the file before doing other work. Treat this as a hard precondition — don't proceed with other tasks until the plan is fresh.
 
 <!-- ai-project-status:end -->
