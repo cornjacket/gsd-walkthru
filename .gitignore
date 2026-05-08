@@ -10,3 +10,18 @@ coverage/
 
 # Per-user Claude Code overrides (Claude Code merges this with .claude/settings.json at runtime)
 .claude/settings.local.json
+
+# Per-user GSD machinery installed under .claude/ — config, agents, commands, hooks, helpers.
+# Tracked exceptions: .claude/settings.json (project-shared) and .claude/hooks/check-daily-plan.py
+# (the daily-plan SessionStart hook). Anything else under .claude/ is per-user/per-session.
+.claude/.progress-state
+.claude/agents/
+.claude/commands/
+.claude/get-shit-done/
+.claude/gsd-file-manifest.json
+.claude/hooks/gsd-*
+.claude/hooks/show-progress.sh
+.claude/package.json
+
+# Per-user run script for dangerous mode (skips permission prompts; not safe to share).
+run-claude-dangerously.sh
