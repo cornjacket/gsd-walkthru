@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: ready_to_execute
-stopped_at: Phase 5 planned (2 plans, 1 wave)
-last_updated: "2026-05-08T17:00:00.000Z"
-last_activity: 2026-05-08 -- Phase 05 planning complete
+status: ready_to_verify
+stopped_at: Phase 5 wave 1 complete (2/2 plans, 110/110 tests)
+last_updated: "2026-05-08T18:05:00.000Z"
+last_activity: 2026-05-08 -- Phase 05 wave 1 merged
 progress:
   total_phases: 7
   completed_phases: 4
   total_plans: 19
-  completed_plans: 14
+  completed_plans: 16
   percent: 57
 ---
 
@@ -27,11 +27,11 @@ See: .planning/PROJECT.md (updated 2026-05-07)
 
 Milestone: v1.0
 Phase: 5
-Plan: 2 plans, 1 wave
-Status: Ready to execute
+Plan: 2/2 complete
+Status: Ready to verify
 Last activity: 2026-05-08
 
-Progress: 4 of 7 phases complete (57%) — 14/14 plans done across closed phases; Phase 05 planned (05-01 GitHub + 05-02 Shopify, both wave 1, fully parallel)
+Progress: 4 of 7 phases complete (57%) — 16/16 plans done; Phase 05 wave 1 complete (05-01 GitHub + 05-02 Shopify both green; 110/110 tests across 13 files; awaiting code review + verifier)
 
 ## Performance Metrics
 
@@ -86,6 +86,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-05-08T17:00:00.000Z
-Stopped at: Phase 5 planned (2 plans, 1 wave)
-Resume file: .planning/phases/05-github-shopify-providers/05-01-PLAN.md
+Last session: 2026-05-08T18:05:00.000Z
+Stopped at: Phase 5 wave 1 complete (2/2 plans, 110/110 tests)
+Resume file: .planning/phases/05-github-shopify-providers/05-01-SUMMARY.md

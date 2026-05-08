@@ -106,8 +106,8 @@ Plans:
   5. Unit tests cover GitHub HMAC-SHA256 validation (happy path + tampered body), explicit rejection of the deprecated `X-Hub-Signature` (SHA-1) header, exposure of `X-GitHub-Delivery` on `req.webhook`, Shopify base64-decoded validation (happy path), explicit rejection of hex-encoded Shopify digest, and exposure of `X-Shopify-Topic` and `X-Shopify-Webhook-Id` on `req.webhook`. All tests pass.
 **Plans**: 2 plans
 Plans:
-- [ ] 05-01-PLAN.md — Real githubProvider.validate() (HMAC-SHA256, sha256= prefix, X-GitHub-Delivery → deliveryId) + co-located unit tests (D-01..D-04, D-07..D-13, D-14, D-15)
-- [ ] 05-02-PLAN.md — Real shopifyProvider.validate() (HMAC-SHA256, base64 decode, X-Shopify-Topic + X-Shopify-Webhook-Id → topic/webhookId) + co-located unit tests (D-05..D-13, D-14, D-15)
+- [x] 05-01-PLAN.md — Real githubProvider.validate() (HMAC-SHA256, sha256= prefix, X-GitHub-Delivery → deliveryId) + co-located unit tests (D-01..D-04, D-07..D-13, D-14, D-15)
+- [x] 05-02-PLAN.md — Real shopifyProvider.validate() (HMAC-SHA256, base64 decode, X-Shopify-Topic + X-Shopify-Webhook-Id → topic/webhookId) + co-located unit tests (D-05..D-13, D-14, D-15)
 
 ### Phase 6: Integration Tests, Coverage Gate & Negative-Case Audit
 **Goal**: A reviewer running `npm test` sees a Supertest-driven integration suite that exercises all three providers end-to-end through a real Express app, an enforced coverage gate above 90% on core validation logic, and an audited negative-case suite that fails when its guard is removed. By the time we reach this phase, unit tests for crypto, the error class, and each provider already exist (shipped in Phases 2-5); this phase verifies that work holistically and adds the cross-cutting coverage that only makes sense once all providers are in place.
