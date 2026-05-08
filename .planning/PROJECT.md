@@ -15,13 +15,13 @@ A backend developer integrating any supported webhook provider can validate sign
 <!-- Shipped and confirmed valuable. -->
 
 - [x] Validate Stripe webhook signatures with timestamp-window replay protection (configurable, 5-minute default) — Validated in Phase 4: real `stripeProvider.validate()` (HMAC-SHA256, multi-`v1=` rotation, past-only tolerance, JSON-parse-after-HMAC) + 15 unit tests cover SC1–SC4 + D-13 negatives; STRP-01/STRP-02/STRP-03 all green; 86/86 suite passes.
+- [x] Validate GitHub webhook signatures (HMAC-SHA256 of raw body, `X-Hub-Signature-256`) — Validated in Phase 5: real `githubProvider.validate()` (HMAC-SHA256 over rawBody Buffer-direct, `sha256=` prefix + hex-tail parse, deprecated SHA-1 header invisible to validator, three-way auth-header split fixing P4 WR-03 from day one) + 13 unit tests cover SC1+SC2+SC5; GHUB-01/GHUB-02/GHUB-03 all green; `req.webhook.deliveryId` surfaces `X-GitHub-Delivery` for downstream dedup.
+- [x] Validate Shopify webhook signatures (HMAC-SHA256 of raw body, `X-Shopify-Hmac-Sha256`) — Validated in Phase 5: real `shopifyProvider.validate()` (HMAC-SHA256 over rawBody Buffer-direct, loose base64 decode, hex-as-base64 rejected via P2 D-09 length-mismatch path → `'signature_mismatch'`, NO reason union widening) + 11 unit tests cover SC3+SC4+SC5; SHOP-01/SHOP-02 all green; `req.webhook.topic` and `req.webhook.webhookId` surface `X-Shopify-Topic` + `X-Shopify-Webhook-Id` for downstream dedup.
 
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] Validate GitHub webhook signatures (HMAC-SHA256 of raw body, `X-Hub-Signature-256`)
-- [ ] Validate Shopify webhook signatures (HMAC-SHA256 of raw body, `X-Shopify-Hmac-Sha256`)
 - [ ] Provide a single consistent middleware API shape across all three providers
 - [ ] Capture raw request body correctly (the most common integration footgun)
 - [ ] Use constant-time comparison for signature verification
@@ -74,7 +74,7 @@ A backend developer integrating any supported webhook provider can validate sign
 |----------|-----------|---------|
 | Express-first, not framework-agnostic | Differentiates from existing libraries; tighter ergonomics for the dominant Node web framework | — Pending |
 | Unified middleware shape across providers | Reduces mental overhead vs each SDK's own pattern; this is the project's main DX angle | — Pending |
-| Stripe replay protection on by default; GitHub/Shopify gap documented | Only Stripe signs a timestamp; honest documentation beats false promises | Stripe half shipped in Phase 4 (300s default tolerance, configurable, multi-`v1=` rotation); GitHub/Shopify gap documentation pending Phase 5/7 |
+| Stripe replay protection on by default; GitHub/Shopify gap documented | Only Stripe signs a timestamp; honest documentation beats false promises | Stripe shipped in Phase 4 (300s default tolerance, configurable, multi-`v1=` rotation); GitHub/Shopify validators shipped in Phase 5 with receipt-time `timestamp` (NOT provider-signed — honest about replay-defense gap); README docs deferred to Phase 7 |
 | No built-in delivery-ID dedup store | Pure middleware library; stateful dedup belongs in the user's application | — Pending |
 | Ship runnable example Express app | Portfolio reviewers can clone and run; concrete demos beat abstract claims | — Pending |
 | No vendor SDK dependencies | Keeps footprint small; reinforces "validate without buying into a vendor's whole SDK" positioning | — Pending |
@@ -97,4 +97,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-07 after Phase 4 (Stripe Provider) completion — real `stripeProvider.validate()` HMAC-SHA256 implementation with past-only tolerance window (300s default, configurable), multi-`v1=` segment rotation, JSON-parse-after-HMAC ordering; `tolerance?: number` plumbed through `CreateWebhookMiddlewareOptions`; `WebhookValidationReason` widened with `'invalid_signature_format'`. 86 tests green across 11 files (+15 stripe-specific). 5 advisory code-review warnings (NaN tolerance guard, vacuous-pass tests, multi-header reason, dup default 300, parseInt regex) tracked in `04-REVIEW.md` for follow-up. GitHub/Shopify (Phase 5) and integration/coverage (Phase 6) remain.*
+*Last updated: 2026-05-08 after Phase 5 (GitHub & Shopify Providers) completion — real `githubProvider.validate()` (HMAC-SHA256 over rawBody Buffer-direct, `sha256=<hex>` parse, deprecated SHA-1 header invisible per D-02, `eventId === deliveryId`) and `shopifyProvider.validate()` (HMAC-SHA256 over rawBody Buffer-direct, loose base64 decode, hex-as-base64 rejected via Phase 2 D-09 length-mismatch → `'signature_mismatch'`, `eventId === webhookId`). Phase 5 shipped Phase 4 WR-03 fix (D-10 three-way auth-header split — array → `'invalid_signature_format'`, not folded into `'missing_header'`) and Phase 4 WR-02 fix (D-14 mandatory outer-`expect(toThrow)` guard) from day one in BOTH new providers. NO new public exports, NO `WebhookValidationReason` union widening, NO touches to errors/middleware/index/registry/types/stripe — only `src/providers/{github,shopify}.{ts,test.ts}`. 110 tests green across 13 files (+24 from 86/11 baseline: 13 GitHub + 11 Shopify). 3 advisory code-review warnings (empty-string asymmetry untested, leakage assertion shape, leakage assertion not on tampered path) tracked in `05-REVIEW.md` for Phase 6 negative-case audit. Phase 6 (integration tests + coverage gate + cross-provider audit including the 5 advisory carry-overs from Phase 4 + 3 from Phase 5) and Phase 7 (README + example app) remain.*
