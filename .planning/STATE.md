@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: ready_to_verify
-stopped_at: Phase 5 wave 1 complete (2/2 plans, 110/110 tests)
-last_updated: "2026-05-08T18:05:00.000Z"
-last_activity: 2026-05-08 -- Phase 05 wave 1 merged
+status: phase_complete
+stopped_at: Phase 5 verified (5/5 must-haves, 110 tests green)
+last_updated: "2026-05-08T18:20:00.000Z"
+last_activity: 2026-05-08 -- Phase 05 verified passed
 progress:
   total_phases: 7
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 19
   completed_plans: 16
-  percent: 57
+  percent: 71
 ---
 
 # Project State
@@ -21,17 +21,17 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-07)
 
 **Core value:** A backend developer integrating any supported webhook provider can validate signatures correctly with one line of middleware — with replay protection where the provider supports it, and documented honesty about where it doesn't.
-**Current focus:** Phase 05 — github-shopify-providers
+**Current focus:** Phase 06 — integration-tests-coverage-audit
 
 ## Current Position
 
 Milestone: v1.0
-Phase: 5
-Plan: 2/2 complete
-Status: Ready to verify
+Phase: 6
+Plan: Not started
+Status: Phase 5 complete — ready for Phase 6 discuss
 Last activity: 2026-05-08
 
-Progress: 4 of 7 phases complete (57%) — 16/16 plans done; Phase 05 wave 1 complete (05-01 GitHub + 05-02 Shopify both green; 110/110 tests across 13 files; awaiting code review + verifier)
+Progress: 5 of 7 phases complete (71%) — 16/16 plans done; Phase 05 verified passed (5/5 must-haves; 110/110 tests across 13 files; 3 advisory warnings in 05-REVIEW.md tracked for Phase 6 audit)
 
 ## Performance Metrics
 
@@ -86,6 +86,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-05-08T18:05:00.000Z
-Stopped at: Phase 5 wave 1 complete (2/2 plans, 110/110 tests)
-Resume file: .planning/phases/05-github-shopify-providers/05-01-SUMMARY.md
+Last session: 2026-05-08T18:20:00.000Z
+Stopped at: Phase 5 verified passed (5/5 must-haves)
+Resume file: .planning/phases/05-github-shopify-providers/05-VERIFICATION.md

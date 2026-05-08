@@ -20,7 +20,7 @@ Build a TypeScript Express middleware library that unifies HMAC signature valida
 - [x] **Phase 2: Crypto Core & Error Class** - HMAC computation, length-safe constant-time comparison, and the discriminated `WebhookValidationError` class — with unit tests shipping alongside the code
 - [x] **Phase 3: Body Handling & Public API Surface** - Raw-body capture, the `createWebhookMiddleware` factory, full TypeScript types, and safe 401 error responses — with unit tests shipping alongside the code
 - [x] **Phase 4: Stripe Provider** - Stripe HMAC validation with timestamp tolerance window and multi-`v1=` segment support for secret rotation — with unit tests shipping alongside the code
-- [ ] **Phase 5: GitHub & Shopify Providers** - GitHub SHA-256 validation and Shopify base64-encoded validation with provider metadata exposure — with unit tests shipping alongside the code
+- [x] **Phase 5: GitHub & Shopify Providers** - GitHub SHA-256 validation and Shopify base64-encoded validation with provider metadata exposure — with unit tests shipping alongside the code
 - [ ] **Phase 6: Integration Tests, Coverage Gate & Negative-Case Audit** - Supertest integration suite across all three providers, enforced >90% coverage gate on core validation logic in CI, and an audit pass that closes any remaining negative-case gaps from Phases 2-5
 - [ ] **Phase 7: Documentation & Example App** - README with per-provider quickstarts and security notes, plus a runnable example Express app demonstrating all three providers
 
@@ -141,6 +141,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 2. Crypto Core & Error Class | 3/3 | Complete | 2026-05-06 |
 | 3. Body Handling & Public API Surface | 7/7 | Complete | 2026-05-07 |
 | 4. Stripe Provider | 3/3 | Complete | 2026-05-07 |
-| 5. GitHub & Shopify Providers | 0/2 | Not started | - |
+| 5. GitHub & Shopify Providers | 2/2 | Complete | 2026-05-08 |
 | 6. Integration Tests, Coverage Gate & Negative-Case Audit | 0/TBD | Not started | - |
 | 7. Documentation & Example App | 0/TBD | Not started | - |

@@ -32,14 +32,14 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### GitHub Provider
 
-- [ ] **GHUB-01**: Validate GitHub HMAC-SHA256 signature from `X-Hub-Signature-256`
-- [ ] **GHUB-02**: Do not accept deprecated `X-Hub-Signature` (SHA-1) — explicitly reject or ignore
-- [ ] **GHUB-03**: Surface `X-GitHub-Delivery` ID in `req.webhook` for downstream dedup by user code
+- [x] **GHUB-01**: Validate GitHub HMAC-SHA256 signature from `X-Hub-Signature-256`
+- [x] **GHUB-02**: Do not accept deprecated `X-Hub-Signature` (SHA-1) — explicitly reject or ignore
+- [x] **GHUB-03**: Surface `X-GitHub-Delivery` ID in `req.webhook` for downstream dedup by user code
 
 ### Shopify Provider
 
-- [ ] **SHOP-01**: Validate Shopify HMAC-SHA256 signature from `X-Shopify-Hmac-Sha256` using **base64** decoding (not hex)
-- [ ] **SHOP-02**: Surface `X-Shopify-Topic` and `X-Shopify-Webhook-Id` in `req.webhook` for downstream use
+- [x] **SHOP-01**: Validate Shopify HMAC-SHA256 signature from `X-Shopify-Hmac-Sha256` using **base64** decoding (not hex)
+- [x] **SHOP-02**: Surface `X-Shopify-Topic` and `X-Shopify-Webhook-Id` in `req.webhook` for downstream use
 
 ### Public API
 
@@ -110,11 +110,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | STRP-01 | Phase 4 | Pending |
 | STRP-02 | Phase 4 | Pending |
 | STRP-03 | Phase 4 | Pending |
-| GHUB-01 | Phase 5 | Pending |
-| GHUB-02 | Phase 5 | Pending |
-| GHUB-03 | Phase 5 | Pending |
-| SHOP-01 | Phase 5 | Pending |
-| SHOP-02 | Phase 5 | Pending |
+| GHUB-01 | Phase 5 | Complete |
+| GHUB-02 | Phase 5 | Complete |
+| GHUB-03 | Phase 5 | Complete |
+| SHOP-01 | Phase 5 | Complete |
+| SHOP-02 | Phase 5 | Complete |
 | API-01 | Phase 3 | Pending |
 | API-02 | Phase 2 | Pending |
 | API-03 | Phase 3 | Pending |
