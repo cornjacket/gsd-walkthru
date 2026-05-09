@@ -1,39 +1,44 @@
-# Daily plan — 2026-05-08
+# Daily plan — 2026-05-10
 
-Run Phase 5 (GitHub & Shopify Providers) end-to-end in one sitting, mirroring
-the Phase 4 arc: `/gsd-discuss-phase 5` → `/gsd-plan-phase 5` →
-`/gsd-execute-phase 5`. Phase 5 lifts two providers onto the Phase 3/4 surface
-— GitHub HMAC-SHA256 with `X-GitHub-Delivery` exposure and Shopify
-base64-encoded HMAC with `X-Shopify-Topic` / `X-Shopify-Webhook-Id` exposure
-— so the discuss step is where the SHA-1 rejection contract and the
-hex-vs-base64 gotcha need to lock down before plans get drafted. Five 04-REVIEW
-advisories ride into Phase 5 context (no blockers).
+Carry Phase 6 (Integration Tests, Coverage Gate & Negative-Case Audit) from
+context → plan → execute in one sitting, same arc as Phase 4 and Phase 5.
+Today's discuss step locked 19 decisions across four areas (coverage tooling,
+integration suite layout, all 8 carry-over advisory fixes, and the manual
+guard-removal mutation experiment), so plan-phase has unusually low ambiguity
+to resolve. Phase 6 is the cross-cutting quality gate that finishes v1's
+testing story; Phase 7 (README + example app) is all that follows.
 
 ```
-   Phase 4 ✓                                          Phase 5 closed
-   pushed                                             (verifier green)
-       │                                                    │
-       ▼                                                    ▼
-   ┌─────────┐    ┌────────────┐    ┌──────────┐    ┌─────────────┐
-   │ discuss │ →  │   plan     │ →  │ execute  │ →  │  verify +   │
-   │ phase 5 │    │  phase 5   │    │ phase 5  │    │  ROADMAP    │
-   │ (GHUB+  │    │  (waves    │    │ (worktree│    │  Phase 5 [x]│
-   │  SHOP)  │    │   drafted) │    │  agents) │    │  + STATE    │
-   └─────────┘    └────────────┘    └──────────┘    └─────────────┘
-      AM             AM-mid            midday              PM
+   Phase 6 context                                     Phase 6 closed
+   on disk (06-CONTEXT.md)                             (verifier green)
+        │                                                    │
+        ▼                                                    ▼
+   ┌──────────┐    ┌──────────┐    ┌─────────────┐    ┌─────────────┐
+   │   plan   │ →  │ execute  │ →  │ mutation    │ →  │  verify +   │
+   │ phase 6  │    │ phase 6  │    │ experiment  │    │  ROADMAP    │
+   │ (~4      │    │ (waves   │    │ (5 guards,  │    │  Phase 6 [x]│
+   │  plans)  │    │  drafted)│    │  revert ea.)│    │  + STATE    │
+   └──────────┘    └──────────┘    └─────────────┘    └─────────────┘
+      AM              AM-mid           midday               PM
 ```
 
 Notes:
-- **Discuss locks the gotchas**: SHA-1 deprecated-header explicit reject
-  (GHUB-01) + Shopify base64 vs hex (SHOP-01) are the two failure modes the
-  test suite has to pin down — surface them in discuss before they leak into
-  plan revisions.
-- **Metadata pass-through**: Phase 5 introduces per-provider metadata
-  (`deliveryId`, `topic`, `webhookId`) on the discriminated `req.webhook`
-  union — confirm against the Phase 3 D-11 contract during discuss.
-- **04-REVIEW carry-over**: 5 advisory warnings tracked in
-  `.planning/phases/04-stripe-provider/04-REVIEW.md`; fold any that touch
-  Phase 5 surfaces (provider plumbing, error union) into Phase 5 context, defer
-  the rest.
-- **EOD signoff**: if Phase 5 closes cleanly, write Saturday's plan or skip to
-  Monday — `daily-plan.md` aggregator tolerates the weekend.
+- **Plan likely splits into ~4 plans**: coverage tooling install + vitest
+  config + CI step + script alias; integration suite (3 files, both
+  body-parser modes per file); audit-fix bundle (D-12..D-16, possibly split
+  into stripe-source-fixes vs test-file-fixes); mutation experiment +
+  06-VERIFICATION.md "Guard Removal Demonstrations". Plans 2 and 3 are
+  largely independent — good parallelism for execute-phase.
+- **Stripe touches concentrate**: D-12 (array-header three-way split), D-13
+  (factory tolerance loud-fail), D-14 (strict-numeric `t=`), D-15 P4 WR-04
+  (default-tolerance dedupe). All in `src/middleware.ts` + `src/providers/stripe.ts`
+  + `src/providers/stripe.test.ts` — keep these atomic so review diff stays
+  scannable.
+- **`tests/integration/` is greenfield**: P1 D-05 reserved the directory
+  but Phase 6 actually creates it. `vitest.config.ts` `include` MUST expand
+  to pick it up, otherwise the new tests run on no machine.
+- **Mutation experiment discipline**: D-19 says edit → test → revert → next,
+  no commits. Verify `git status` is clean after all 5 guards. The only
+  artifact is the evidence table in 06-VERIFICATION.md.
+- **EOD signoff**: if Phase 6 closes cleanly, only Phase 7 (README + runnable
+  example app) remains for v1.0. Write Monday's plan or signal Phase 7 ready.
