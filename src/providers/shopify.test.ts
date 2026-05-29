@@ -55,9 +55,9 @@ describe('shopifyProvider.validate()', () => {
     const result = shopifyProvider.validate(req as any, SAMPLE_SECRET);
     const after = Math.floor(Date.now() / 1000);
     expect(result.provider).toBe('shopify');
-    expect(result.eventId).toBe(SAMPLE_WEBHOOK_ID);                 // D-11
-    expect((result as any).webhookId).toBe(SAMPLE_WEBHOOK_ID);       // SHOP-02 / SC4
-    expect((result as any).topic).toBe(SAMPLE_TOPIC);                // SHOP-02 / SC4
+    expect(result.eventId).toBe(SAMPLE_WEBHOOK_ID); // D-11
+    expect((result as any).webhookId).toBe(SAMPLE_WEBHOOK_ID); // SHOP-02 / SC4
+    expect((result as any).topic).toBe(SAMPLE_TOPIC); // SHOP-02 / SC4
     expect(result.parsed).toMatchObject({ order_id: 12345 });
     expect(result.timestamp).toBeGreaterThanOrEqual(before);
     expect(result.timestamp).toBeLessThanOrEqual(after);
@@ -217,7 +217,7 @@ describe('shopifyProvider.validate()', () => {
 
   // ── D-08, D-09, D-11: Metadata header behavior ───────────────────────────
 
-  it('missing X-Shopify-Topic → success with topic === \'\' (D-08)', () => {
+  it("missing X-Shopify-Topic → success with topic === '' (D-08)", () => {
     const sig = makeSignature(SAMPLE_BODY, SAMPLE_SECRET);
     const req = makeReq({ signature: sig, topic: undefined, webhookId: SAMPLE_WEBHOOK_ID });
     const result = shopifyProvider.validate(req as any, SAMPLE_SECRET);
@@ -226,7 +226,7 @@ describe('shopifyProvider.validate()', () => {
     expect(result.eventId).toBe(SAMPLE_WEBHOOK_ID);
   });
 
-  it('missing X-Shopify-Webhook-Id → success with webhookId === \'\' and eventId === \'\' (D-08, D-11)', () => {
+  it("missing X-Shopify-Webhook-Id → success with webhookId === '' and eventId === '' (D-08, D-11)", () => {
     const sig = makeSignature(SAMPLE_BODY, SAMPLE_SECRET);
     const req = makeReq({ signature: sig, topic: SAMPLE_TOPIC, webhookId: undefined });
     const result = shopifyProvider.validate(req as any, SAMPLE_SECRET);

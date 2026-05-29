@@ -4,8 +4,8 @@ import request from 'supertest';
 import { describe, expect, it } from 'vitest';
 import { webhookErrorHandler } from '../../src/error-handler.js';
 import { createWebhookMiddleware } from '../../src/middleware.js';
-import { captureRawBody } from '../../src/raw-body/verify.js';
 import { rawBodyCapture } from '../../src/raw-body/middleware.js';
+import { captureRawBody } from '../../src/raw-body/verify.js';
 // Side-effect import: triggers registerProvider('shopify', shopifyProvider)
 import '../../src/providers/shopify.js';
 
@@ -71,9 +71,7 @@ describe('Shopify integration — rawBodyCapture mode (BODY-01)', () => {
   });
 
   it('hex-encoded digest (wrong encoding): returns 401 (QUAL-04 Shopify encoding mismatch)', async () => {
-    const hexDigest = createHmac('sha256', SAMPLE_SECRET)
-      .update(SAMPLE_PAYLOAD)
-      .digest('hex'); // hex, not base64 — wrong encoding
+    const hexDigest = createHmac('sha256', SAMPLE_SECRET).update(SAMPLE_PAYLOAD).digest('hex'); // hex, not base64 — wrong encoding
     const res = await request(makeApp('rawBodyCapture'))
       .post('/webhook')
       .set('content-type', 'application/json')

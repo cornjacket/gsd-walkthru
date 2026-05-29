@@ -4,8 +4,8 @@ import request from 'supertest';
 import { describe, expect, it } from 'vitest';
 import { webhookErrorHandler } from '../../src/error-handler.js';
 import { createWebhookMiddleware } from '../../src/middleware.js';
-import { captureRawBody } from '../../src/raw-body/verify.js';
 import { rawBodyCapture } from '../../src/raw-body/middleware.js';
+import { captureRawBody } from '../../src/raw-body/verify.js';
 // Side-effect import: triggers registerProvider('github', githubProvider)
 import '../../src/providers/github.js';
 

@@ -19,8 +19,8 @@
 // The deprecated SHA-1 header (the one without the -256 suffix) is invisible —
 // never read for any purpose. SHA-1-only request → 'missing_header' (D-01).
 import type { Request } from 'express';
-import { computeHmac } from '../crypto/hmac.js';
 import { timingSafeCompare } from '../crypto/compare.js';
+import { computeHmac } from '../crypto/hmac.js';
 import { WebhookValidationError } from '../errors.js';
 import { registerProvider } from './registry.js';
 import type { Provider } from './types.js';
@@ -110,10 +110,11 @@ export const githubProvider: Provider = {
     // Auth has passed; this is post-auth metadata. The validator's job is auth, not
     // contract-policing of vendor metadata.
     const deliveryRaw = req.headers['x-github-delivery'];
-    const deliveryId =
-      Array.isArray(deliveryRaw)
-        ? (deliveryRaw[0] || '')
-        : (typeof deliveryRaw === 'string' ? deliveryRaw : '');
+    const deliveryId = Array.isArray(deliveryRaw)
+      ? deliveryRaw[0] || ''
+      : typeof deliveryRaw === 'string'
+        ? deliveryRaw
+        : '';
 
     // Step 7 — JSON.parse rawBody after signature passes (D-13 step 7).
     // Defense against parser-level DoS on attacker-controlled input — only authenticated
@@ -132,8 +133,8 @@ export const githubProvider: Provider = {
     // Step 8 — Build GitHubWebhook (D-11: eventId === deliveryId; D-12: receipt timestamp).
     return {
       provider: 'github',
-      eventId: deliveryId,                          // D-11
-      timestamp: Math.floor(Date.now() / 1000),     // D-12 — receipt time, not provider-signed
+      eventId: deliveryId, // D-11
+      timestamp: Math.floor(Date.now() / 1000), // D-12 — receipt time, not provider-signed
       parsed: parsedBody,
       deliveryId,
     };

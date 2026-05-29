@@ -15,8 +15,8 @@
 //   7. JSON.parse body    → 'malformed_payload' (400) if parse fails
 //   8. build StripeWebhook
 import type { Request } from 'express';
-import { computeHmac } from '../crypto/hmac.js';
 import { timingSafeCompare } from '../crypto/compare.js';
+import { computeHmac } from '../crypto/hmac.js';
 import { WebhookValidationError } from '../errors.js';
 import { registerProvider } from './registry.js';
 import type { Provider } from './types.js';
@@ -42,9 +42,7 @@ export type StripeWebhook = {
  * D-07: silently ignores `v0=`, `v2=`, and all other non-v1 schemes.
  * D-07: requires at least one `v1=` segment to return non-null.
  */
-function parseStripeSignature(
-  header: string
-): { timestamp: number; v1Segments: string[] } | null {
+function parseStripeSignature(header: string): { timestamp: number; v1Segments: string[] } | null {
   let timestamp: number | undefined;
   const v1Segments: string[] = [];
   for (const pair of header.split(',')) {
@@ -69,7 +67,13 @@ function parseStripeSignature(
 
 export const stripeProvider: Provider = {
   name: 'stripe',
-  validate(req: Request, secret: string, toleranceSeconds: number): StripeWebhook {
+  // WR-04: `toleranceSeconds` carries NO default here — the middleware is the
+  // sole source of the 300s default (it always passes `options.tolerance ?? 300`).
+  // The param is optional only so this method stays assignable to the 2-arg
+  // `Provider` contract (D-16 — the middleware bridges the 3rd arg via a localized
+  // Function cast). A missing value at the timestamp check is a programming error
+  // (validate() called outside the middleware) and fails loud — see Step 6.
+  validate(req: Request, secret: string, toleranceSeconds?: number): StripeWebhook {
     // Step 1 — rawBody guard (D-08 step 1, Phase 3 D-07)
     if (!req.rawBody) {
       throw new WebhookValidationError({
@@ -129,6 +133,14 @@ export const stripeProvider: Provider = {
     }
 
     // Step 6 — Timestamp tolerance check (past-only per D-01)
+    // WR-04: no default tolerance — fail loud if the middleware (sole source of
+    // the 300s default) did not supply one. Prevents a silently-disabled replay
+    // window if validate() is ever invoked outside the middleware.
+    if (toleranceSeconds === undefined) {
+      throw new Error(
+        'stripe provider requires an explicit toleranceSeconds; the middleware supplies it (options.tolerance ?? 300)'
+      );
+    }
     const nowSeconds = Date.now() / 1000;
     const age = nowSeconds - timestamp;
     if (age > toleranceSeconds) {

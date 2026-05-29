@@ -88,7 +88,11 @@ export function createWebhookMiddleware(
   // Mirrors the P3 WR-03 secret-whitespace loud-fail precedent. Plain Error (not
   // WebhookValidationError) — this is a configuration error, not a request validation error.
   if (options.tolerance !== undefined) {
-    if (typeof options.tolerance !== 'number' || !Number.isFinite(options.tolerance) || options.tolerance < 0) {
+    if (
+      typeof options.tolerance !== 'number' ||
+      !Number.isFinite(options.tolerance) ||
+      options.tolerance < 0
+    ) {
       throw new Error(
         `Webhook tolerance must be a non-negative finite number for provider '${providerName}' (got ${String(options.tolerance)})`
       );
@@ -121,7 +125,12 @@ export function createWebhookMiddleware(
       // providers accepting a tolerance argument (Stripe) can receive it
       // without polluting the shared Provider contract.
       // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-      const metadata = (provider!.validate as Function).call(provider, req, secret, tolerance) as WebhookMetadata;
+      const metadata = (provider!.validate as Function).call(
+        provider,
+        req,
+        secret,
+        tolerance
+      ) as WebhookMetadata;
       req.webhook = metadata;
       next();
     } catch (err) {

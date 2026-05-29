@@ -57,8 +57,8 @@ describe('githubProvider.validate()', () => {
     const result = githubProvider.validate(req as any, SAMPLE_SECRET);
     const after = Math.floor(Date.now() / 1000);
     expect(result.provider).toBe('github');
-    expect(result.eventId).toBe(SAMPLE_DELIVERY);              // D-11
-    expect((result as any).deliveryId).toBe(SAMPLE_DELIVERY);   // GHUB-03 / SC2
+    expect(result.eventId).toBe(SAMPLE_DELIVERY); // D-11
+    expect((result as any).deliveryId).toBe(SAMPLE_DELIVERY); // GHUB-03 / SC2
     expect(result.parsed).toMatchObject({ action: 'opened', number: 1 });
     // D-12 — receipt timestamp at validation time
     expect(result.timestamp).toBeGreaterThanOrEqual(before);
@@ -208,7 +208,12 @@ describe('githubProvider.validate()', () => {
   it('valid signature on non-JSON body throws malformed_payload (D-13 step 7)', () => {
     const nonJson = 'not-json';
     const sig = makeSignature(nonJson, SAMPLE_SECRET);
-    const req = makeReq({ body: nonJson, rawBody: Buffer.from(nonJson), signature: sig, delivery: SAMPLE_DELIVERY });
+    const req = makeReq({
+      body: nonJson,
+      rawBody: Buffer.from(nonJson),
+      signature: sig,
+      delivery: SAMPLE_DELIVERY,
+    });
     expect(() => githubProvider.validate(req as any, SAMPLE_SECRET)).toThrow(
       WebhookValidationError
     );
@@ -222,7 +227,7 @@ describe('githubProvider.validate()', () => {
 
   // ── D-08, D-09, D-11: Metadata header behavior ───────────────────────────
 
-  it('missing X-GitHub-Delivery → success with deliveryId === \'\' and eventId === \'\' (D-08, D-11)', () => {
+  it("missing X-GitHub-Delivery → success with deliveryId === '' and eventId === '' (D-08, D-11)", () => {
     const sig = makeSignature(SAMPLE_BODY, SAMPLE_SECRET);
     const req = makeReq({ signature: sig, delivery: undefined });
     const result = githubProvider.validate(req as any, SAMPLE_SECRET);

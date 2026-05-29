@@ -17,8 +17,8 @@
 //   7. JSON.parse body    → 'malformed_payload' (400) if parse fails
 //   8. build ShopifyWebhook with eventId === webhookId (D-11), timestamp = floor(Date.now()/1000) (D-12)
 import type { Request } from 'express';
-import { computeHmac } from '../crypto/hmac.js';
 import { timingSafeCompare } from '../crypto/compare.js';
+import { computeHmac } from '../crypto/hmac.js';
 import { WebhookValidationError } from '../errors.js';
 import { registerProvider } from './registry.js';
 import type { Provider } from './types.js';
@@ -96,16 +96,18 @@ export const shopifyProvider: Provider = {
     // Step 6 — Read X-Shopify-Topic + X-Shopify-Webhook-Id metadata
     // (D-08 missing→''; D-09 array→[0]||''). Auth has passed; this is post-auth metadata.
     const topicRaw = req.headers['x-shopify-topic'];
-    const topic =
-      Array.isArray(topicRaw)
-        ? (topicRaw[0] || '')
-        : (typeof topicRaw === 'string' ? topicRaw : '');
+    const topic = Array.isArray(topicRaw)
+      ? topicRaw[0] || ''
+      : typeof topicRaw === 'string'
+        ? topicRaw
+        : '';
 
     const webhookIdRaw = req.headers['x-shopify-webhook-id'];
-    const webhookId =
-      Array.isArray(webhookIdRaw)
-        ? (webhookIdRaw[0] || '')
-        : (typeof webhookIdRaw === 'string' ? webhookIdRaw : '');
+    const webhookId = Array.isArray(webhookIdRaw)
+      ? webhookIdRaw[0] || ''
+      : typeof webhookIdRaw === 'string'
+        ? webhookIdRaw
+        : '';
 
     // Step 7 — JSON.parse rawBody after signature passes (D-13 step 7).
     // Defense against parser-level DoS on attacker-controlled input — only
@@ -124,8 +126,8 @@ export const shopifyProvider: Provider = {
     // Step 8 — Build ShopifyWebhook (D-11: eventId === webhookId; D-12: receipt timestamp).
     return {
       provider: 'shopify',
-      eventId: webhookId,                            // D-11
-      timestamp: Math.floor(Date.now() / 1000),      // D-12 — receipt time, not provider-signed
+      eventId: webhookId, // D-11
+      timestamp: Math.floor(Date.now() / 1000), // D-12 — receipt time, not provider-signed
       parsed: parsedBody,
       topic,
       webhookId,

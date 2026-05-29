@@ -83,15 +83,15 @@ describe('createWebhookMiddleware', () => {
   });
 
   it('throws synchronously on tolerance: NaN (D-13)', () => {
-    expect(() =>
-      createWebhookMiddleware('test-fake', { secret: 'x', tolerance: NaN })
-    ).toThrow(/tolerance.*non-negative finite/i);
+    expect(() => createWebhookMiddleware('test-fake', { secret: 'x', tolerance: NaN })).toThrow(
+      /tolerance.*non-negative finite/i
+    );
   });
 
   it('throws synchronously on tolerance: -1 (D-13)', () => {
-    expect(() =>
-      createWebhookMiddleware('test-fake', { secret: 'x', tolerance: -1 })
-    ).toThrow(/tolerance.*non-negative finite/i);
+    expect(() => createWebhookMiddleware('test-fake', { secret: 'x', tolerance: -1 })).toThrow(
+      /tolerance.*non-negative finite/i
+    );
   });
 
   it('throws synchronously on tolerance: Infinity (D-13)', () => {
@@ -101,9 +101,7 @@ describe('createWebhookMiddleware', () => {
   });
 
   it('accepts tolerance: 0 without throwing (D-13 explicit safe-fail)', () => {
-    expect(() =>
-      createWebhookMiddleware('test-fake', { secret: 'x', tolerance: 0 })
-    ).not.toThrow();
+    expect(() => createWebhookMiddleware('test-fake', { secret: 'x', tolerance: 0 })).not.toThrow();
   });
 
   it('accepts tolerance: undefined without throwing (defaults to 300 in middleware)', () => {

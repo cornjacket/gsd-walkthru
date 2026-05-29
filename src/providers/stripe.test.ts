@@ -1,7 +1,19 @@
 import { createHmac } from 'node:crypto';
+import type { Request } from 'express';
 import { describe, expect, it } from 'vitest';
 import { WebhookValidationError } from '../errors.js';
-import { stripeProvider } from './stripe.js';
+import { type StripeWebhook, stripeProvider } from './stripe.js';
+
+// stripe's validate accepts an explicit tolerance (3rd arg) that the shared
+// 2-arg Provider interface intentionally hides (D-16 keeps the contract at
+// (req, secret); the middleware bridges the 3rd arg via a localized Function
+// cast). Tests exercise the timestamp/tolerance path through this typed view —
+// the same indirection the middleware uses — while keeping full return typing.
+const validateWithTolerance = stripeProvider.validate as (
+  req: Request,
+  secret: string,
+  toleranceSeconds?: number
+) => StripeWebhook;
 
 // Sample sensitive material for leakage assertions
 const SAMPLE_SECRET = 'whsec_test_secret_do_not_leak';
@@ -29,10 +41,7 @@ function makeReq(opts: {
   const body = opts.body ?? '{"id":"evt_1234","type":"charge.succeeded"}';
   return {
     rawBody: opts.rawBody !== undefined ? opts.rawBody : Buffer.from(body),
-    headers:
-      opts.signature !== undefined
-        ? { 'stripe-signature': opts.signature }
-        : {},
+    headers: opts.signature !== undefined ? { 'stripe-signature': opts.signature } : {},
   };
 }
 
@@ -45,7 +54,7 @@ describe('stripeProvider.validate()', () => {
     const timestamp = Math.floor(Date.now() / 1000);
     const sig = makeSignature(body, secret, timestamp);
     const req = makeReq({ body, signature: sig });
-    const result = stripeProvider.validate(req as any, secret, 300);
+    const result = validateWithTolerance(req as any, secret, 300);
     expect(result.provider).toBe('stripe');
     expect(result.eventId).toBe('evt_test');
     expect(result.timestamp).toBe(timestamp);
@@ -60,9 +69,7 @@ describe('stripeProvider.validate()', () => {
     const sig = makeSignature(body, secret, timestamp);
     const tamperedBody = Buffer.from(body.replace('evt_test', 'evt_XXXX'));
     const req = makeReq({ rawBody: tamperedBody, signature: sig });
-    expect(() => stripeProvider.validate(req as any, secret)).toThrow(
-      WebhookValidationError
-    );
+    expect(() => stripeProvider.validate(req as any, secret)).toThrow(WebhookValidationError);
     try {
       stripeProvider.validate(req as any, secret);
     } catch (err) {
@@ -77,11 +84,9 @@ describe('stripeProvider.validate()', () => {
     const oldTimestamp = Math.floor(Date.now() / 1000) - 301;
     const sig = makeSignature(body, secret, oldTimestamp);
     const req = makeReq({ body, signature: sig });
-    expect(() => stripeProvider.validate(req as any, secret, 300)).toThrow(
-      WebhookValidationError
-    );
+    expect(() => validateWithTolerance(req as any, secret, 300)).toThrow(WebhookValidationError);
     try {
-      stripeProvider.validate(req as any, secret, 300);
+      validateWithTolerance(req as any, secret, 300);
     } catch (err) {
       expect((err as WebhookValidationError).reason).toBe('timestamp_too_old');
     }
@@ -93,11 +98,9 @@ describe('stripeProvider.validate()', () => {
     const oldTimestamp = Math.floor(Date.now() / 1000) - 90;
     const sig = makeSignature(body, secret, oldTimestamp);
     const req = makeReq({ body, signature: sig });
-    expect(() => (stripeProvider.validate as any)(req, secret, 60)).toThrow(
-      WebhookValidationError
-    );
+    expect(() => validateWithTolerance(req as any, secret, 60)).toThrow(WebhookValidationError);
     try {
-      (stripeProvider.validate as any)(req, secret, 60);
+      validateWithTolerance(req as any, secret, 60);
     } catch (err) {
       expect((err as WebhookValidationError).reason).toBe('timestamp_too_old');
     }
@@ -107,14 +110,11 @@ describe('stripeProvider.validate()', () => {
     const secret = SAMPLE_SECRET;
     const body = SAMPLE_BODY;
     const timestamp = Math.floor(Date.now() / 1000);
-    const correctSig = createHmac('sha256', secret)
-      .update(`${timestamp}.${body}`)
-      .digest('hex');
-    const wrongSig =
-      'deadbeefcafe1234567890abcdef01234567890abcdef01234567890abcdef0123';
+    const correctSig = createHmac('sha256', secret).update(`${timestamp}.${body}`).digest('hex');
+    const wrongSig = 'deadbeefcafe1234567890abcdef01234567890abcdef01234567890abcdef0123';
     const header = `t=${timestamp},v1=${wrongSig},v1=${correctSig}`;
     const req = makeReq({ body, signature: header });
-    const result = stripeProvider.validate(req as any, secret);
+    const result = validateWithTolerance(req as any, secret, 300);
     expect(result.provider).toBe('stripe');
     expect(result.eventId).toBe('evt_test');
   });
@@ -155,7 +155,11 @@ describe('stripeProvider.validate()', () => {
   });
 
   it('non-numeric t= value (t=1700000000xyz) throws invalid_signature_format (D-14 WR-05)', () => {
-    const req = makeReq({ body: SAMPLE_BODY, signature: 't=1700000000xyz,v1=deadbeefcafe01234567890abcdef01234567890abcdef01234567890abcdef01' });
+    const req = makeReq({
+      body: SAMPLE_BODY,
+      signature:
+        't=1700000000xyz,v1=deadbeefcafe01234567890abcdef01234567890abcdef01234567890abcdef01',
+    });
     expect(() => stripeProvider.validate(req as any, SAMPLE_SECRET)).toThrow(
       WebhookValidationError
     );
@@ -175,9 +179,7 @@ describe('stripeProvider.validate()', () => {
     try {
       stripeProvider.validate(req as any, SAMPLE_SECRET);
     } catch (err) {
-      expect((err as WebhookValidationError).reason).toBe(
-        'invalid_signature_format'
-      );
+      expect((err as WebhookValidationError).reason).toBe('invalid_signature_format');
       expect((err as WebhookValidationError).statusCode).toBe(401);
     }
   });
@@ -188,13 +190,13 @@ describe('stripeProvider.validate()', () => {
       body: SAMPLE_BODY,
       signature: `t=${timestamp},v0=deadbeef`,
     });
-    expect(() => stripeProvider.validate(req as any, SAMPLE_SECRET)).toThrow(WebhookValidationError);
+    expect(() => stripeProvider.validate(req as any, SAMPLE_SECRET)).toThrow(
+      WebhookValidationError
+    );
     try {
       stripeProvider.validate(req as any, SAMPLE_SECRET);
     } catch (err) {
-      expect((err as WebhookValidationError).reason).toBe(
-        'invalid_signature_format'
-      );
+      expect((err as WebhookValidationError).reason).toBe('invalid_signature_format');
     }
   });
 
@@ -204,13 +206,13 @@ describe('stripeProvider.validate()', () => {
       body: SAMPLE_BODY,
       signature: `t=${timestamp},v2=deadbeef`,
     });
-    expect(() => stripeProvider.validate(req as any, SAMPLE_SECRET)).toThrow(WebhookValidationError);
+    expect(() => stripeProvider.validate(req as any, SAMPLE_SECRET)).toThrow(
+      WebhookValidationError
+    );
     try {
       stripeProvider.validate(req as any, SAMPLE_SECRET);
     } catch (err) {
-      expect((err as WebhookValidationError).reason).toBe(
-        'invalid_signature_format'
-      );
+      expect((err as WebhookValidationError).reason).toBe('invalid_signature_format');
     }
   });
 
@@ -236,9 +238,9 @@ describe('stripeProvider.validate()', () => {
     const timestamp = Math.floor(Date.now() / 1000);
     const sig = makeSignature(body, secret, timestamp);
     const req = makeReq({ rawBody: Buffer.from(body), signature: sig });
-    expect(() => stripeProvider.validate(req as any, secret, 300)).toThrow(WebhookValidationError);
+    expect(() => validateWithTolerance(req as any, secret, 300)).toThrow(WebhookValidationError);
     try {
-      stripeProvider.validate(req as any, secret, 300);
+      validateWithTolerance(req as any, secret, 300);
     } catch (err) {
       expect((err as WebhookValidationError).reason).toBe('malformed_payload');
       expect((err as WebhookValidationError).statusCode).toBe(400);
@@ -251,7 +253,7 @@ describe('stripeProvider.validate()', () => {
     const timestamp = Math.floor(Date.now() / 1000);
     const sig = makeSignature(body, secret, timestamp);
     const req = makeReq({ rawBody: Buffer.from(body), signature: sig });
-    const result = stripeProvider.validate(req as any, secret);
+    const result = validateWithTolerance(req as any, secret, 300);
     expect(result.eventId).toBe('');
     expect(result.provider).toBe('stripe');
   });
@@ -262,7 +264,7 @@ describe('stripeProvider.validate()', () => {
     const timestamp = Math.floor(Date.now() / 1000);
     const sig = makeSignature(body, secret, timestamp);
     const req = makeReq({ rawBody: Buffer.from(body), signature: sig });
-    const result = stripeProvider.validate(req as any, secret);
+    const result = validateWithTolerance(req as any, secret, 300);
     expect(result.eventId).toBe('');
   });
 
@@ -272,7 +274,7 @@ describe('stripeProvider.validate()', () => {
     const futureTimestamp = Math.floor(Date.now() / 1000) + 600;
     const sig = makeSignature(body, secret, futureTimestamp);
     const req = makeReq({ body, signature: sig });
-    const result = stripeProvider.validate(req as any, secret);
+    const result = validateWithTolerance(req as any, secret, 300);
     expect(result.provider).toBe('stripe');
   });
 
@@ -283,9 +285,11 @@ describe('stripeProvider.validate()', () => {
       Math.floor(Date.now() / 1000) - 9999
     );
     const req = makeReq({ body: SAMPLE_BODY, signature: SAMPLE_SIGNATURE_VAL });
-    expect(() => stripeProvider.validate(req as any, SAMPLE_SECRET, 300)).toThrow(WebhookValidationError);
+    expect(() => validateWithTolerance(req as any, SAMPLE_SECRET, 300)).toThrow(
+      WebhookValidationError
+    );
     try {
-      stripeProvider.validate(req as any, SAMPLE_SECRET, 300);
+      validateWithTolerance(req as any, SAMPLE_SECRET, 300);
     } catch (err) {
       const json = JSON.stringify(err);
       const str = String(err);
