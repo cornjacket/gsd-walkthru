@@ -84,6 +84,17 @@ export function createWebhookMiddleware(
     throw new Error(`Webhook secret required for provider '${providerName}'`);
   }
 
+  // D-13 (Phase 6): fail loudly at factory call time on NaN/non-finite/negative tolerance.
+  // Mirrors the P3 WR-03 secret-whitespace loud-fail precedent. Plain Error (not
+  // WebhookValidationError) — this is a configuration error, not a request validation error.
+  if (options.tolerance !== undefined) {
+    if (typeof options.tolerance !== 'number' || !Number.isFinite(options.tolerance) || options.tolerance < 0) {
+      throw new Error(
+        `Webhook tolerance must be a non-negative finite number for provider '${providerName}' (got ${String(options.tolerance)})`
+      );
+    }
+  }
+
   const secret = options.secret;
   // STRP-02: resolve tolerance once at factory time so the stripe provider
   // can enforce its timestamp window. Default of 300 s matches Stripe's
