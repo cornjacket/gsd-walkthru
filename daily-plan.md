@@ -1,8 +1,8 @@
-# Daily plan — 2026-05-10
+# Daily plan — 2026-05-29
 
 Carry Phase 6 (Integration Tests, Coverage Gate & Negative-Case Audit) from
 context → plan → execute in one sitting, same arc as Phase 4 and Phase 5.
-Today's discuss step locked 19 decisions across four areas (coverage tooling,
+The discuss step locked 19 decisions across four areas (coverage tooling,
 integration suite layout, all 8 carry-over advisory fixes, and the manual
 guard-removal mutation experiment), so plan-phase has unusually low ambiguity
 to resolve. Phase 6 is the cross-cutting quality gate that finishes v1's
