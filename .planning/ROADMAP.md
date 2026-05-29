@@ -118,7 +118,12 @@ Plans:
   2. Coverage tooling is configured and a CI threshold gate enforces greater than 90% line coverage across `src/crypto/`, `src/providers/`, and `src/middleware.ts`; the build fails when coverage drops below the threshold — satisfying QUAL-03.
   3. A deliberate audit of negative-case completeness across Phases 2-5 has been performed, any gaps filled, and the resulting suite demonstrably fails when each guard is removed — covering tampered body, wrong secret, missing header, Stripe replay outside the tolerance window, and Shopify hex-vs-base64 encoding mismatch — satisfying QUAL-04.
   4. A holistic review confirms QUAL-01 is satisfied: every crypto utility, every `WebhookValidationError` discriminated case, and every provider's signature logic has unit tests (shipped in Phases 2-5); any coverage gaps surfaced during the audit are closed in this phase.
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+- [ ] 06-01-PLAN.md — Coverage tooling: @vitest/coverage-v8 install + vitest.config.ts coverage block + package.json script + CI coverage step
+- [ ] 06-02-PLAN.md — Integration suite: tests/integration/{stripe,github,shopify}.test.ts with both body-parser modes per provider
+- [ ] 06-03-PLAN.md — Audit fixes: D-12..D-16 carry-over repairs across stripe.ts, middleware.ts, and provider test files
+- [ ] 06-04-PLAN.md — Mutation experiment: 5 sequential guard mutations + 06-VERIFICATION.md evidence table
 
 ### Phase 7: Documentation & Example App
 **Goal**: A portfolio reviewer landing on the GitHub README believes this library is shippable within thirty seconds and can clone the example app to see all three providers running locally.
