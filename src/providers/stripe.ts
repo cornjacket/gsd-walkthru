@@ -53,8 +53,10 @@ function parseStripeSignature(
     const key = pair.substring(0, eqIndex);
     const value = pair.substring(eqIndex + 1);
     if (key === 't') {
-      const ts = parseInt(value, 10);
-      if (!isNaN(ts)) timestamp = ts;
+      if (/^-?\d+$/.test(value)) {
+        const ts = parseInt(value, 10);
+        if (!isNaN(ts)) timestamp = ts;
+      }
     } else if (key === 'v1') {
       if (value && /^[0-9a-f]+$/.test(value)) {
         v1Segments.push(value);
@@ -67,7 +69,7 @@ function parseStripeSignature(
 
 export const stripeProvider: Provider = {
   name: 'stripe',
-  validate(req: Request, secret: string, toleranceSeconds = 300): StripeWebhook {
+  validate(req: Request, secret: string, toleranceSeconds: number): StripeWebhook {
     // Step 1 — rawBody guard (D-08 step 1, Phase 3 D-07)
     if (!req.rawBody) {
       throw new WebhookValidationError({
@@ -77,11 +79,18 @@ export const stripeProvider: Provider = {
       });
     }
 
-    // Step 2 — Missing header check (D-04)
+    // Step 2 — Missing header check (D-04, D-12)
     const header = req.headers['stripe-signature'];
-    if (!header || typeof header !== 'string') {
+    if (header === undefined) {
       throw new WebhookValidationError({
         reason: 'missing_header',
+        provider: 'stripe',
+        statusCode: 401,
+      });
+    }
+    if (typeof header !== 'string') {
+      throw new WebhookValidationError({
+        reason: 'invalid_signature_format',
         provider: 'stripe',
         statusCode: 401,
       });
