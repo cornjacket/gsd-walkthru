@@ -173,6 +173,20 @@ describe('githubProvider.validate()', () => {
     }
   });
 
+  it('empty-string X-Hub-Signature-256 throws invalid_signature_format (D-15 P5 WR-01)', () => {
+    const req = makeReq({ signature: '', delivery: SAMPLE_DELIVERY });
+    expect(() => githubProvider.validate(req as any, SAMPLE_SECRET)).toThrow(
+      WebhookValidationError
+    );
+    try {
+      githubProvider.validate(req as any, SAMPLE_SECRET);
+    } catch (err) {
+      // empty string has no sha256= prefix → invalid_signature_format (not missing_header)
+      expect((err as WebhookValidationError).reason).toBe('invalid_signature_format');
+      expect((err as WebhookValidationError).statusCode).toBe(401);
+    }
+  });
+
   // ── P3 D-07 / D-13 step 7: rawBody guards & malformed_payload ────────────
 
   it('missing rawBody throws malformed_payload with statusCode 400 (P3 D-07)', () => {
@@ -243,10 +257,12 @@ describe('githubProvider.validate()', () => {
       const json = JSON.stringify(err);
       const str = String(err);
       expect(json).not.toContain(SAMPLE_SECRET);
-      expect(json).not.toContain(SAMPLE_BODY);
+      // D-15 P5 WR-02: assert against the actual tampered bytes sent ('XXXXXX'),
+      // NOT against SAMPLE_BODY (which the tampered buffer doesn't equal — was trivially true).
+      expect(json).not.toContain('XXXXXX');
       expect(str).not.toContain(SAMPLE_SECRET);
-      // Defense-in-depth: signature bytes should also not appear (the error class
-      // never stores them — P2 D-11 structural guarantee).
+      // D-16: defense-in-depth leakage assertion for future-refactor protection.
+      expect(str).not.toContain('XXXXXX');
     }
   });
 });

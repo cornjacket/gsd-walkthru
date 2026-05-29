@@ -114,6 +114,9 @@ describe('shopifyProvider.validate()', () => {
       // widens the union, this test will catch it.
       expect((err as WebhookValidationError).reason).not.toBe('invalid_encoding' as any);
       expect((err as WebhookValidationError).statusCode).toBe(401);
+      // D-16: defense-in-depth — the hex string sent should not appear in the error
+      const json = JSON.stringify(err);
+      expect(json).not.toContain(hexDigest);
     }
   });
 
@@ -153,6 +156,22 @@ describe('shopifyProvider.validate()', () => {
       // the WR-03 fold defect; Phase 5 ships the fix from day one.
       expect((err as WebhookValidationError).reason).toBe('invalid_signature_format');
       expect((err as WebhookValidationError).reason).not.toBe('missing_header');
+      expect((err as WebhookValidationError).statusCode).toBe(401);
+    }
+  });
+
+  it('empty-string X-Shopify-Hmac-Sha256 throws signature_mismatch (D-15 P5 WR-01)', () => {
+    // Note asymmetry with GitHub: empty string has NO prefix to strip, so the provider
+    // decodes '' as base64 → empty Buffer → length-mismatch in timingSafeCompare
+    // → signature_mismatch (NOT invalid_signature_format). D-15 locks this asymmetry.
+    const req = makeReq({ signature: '', topic: SAMPLE_TOPIC, webhookId: SAMPLE_WEBHOOK_ID });
+    expect(() => shopifyProvider.validate(req as any, SAMPLE_SECRET)).toThrow(
+      WebhookValidationError
+    );
+    try {
+      shopifyProvider.validate(req as any, SAMPLE_SECRET);
+    } catch (err) {
+      expect((err as WebhookValidationError).reason).toBe('signature_mismatch');
       expect((err as WebhookValidationError).statusCode).toBe(401);
     }
   });
@@ -251,10 +270,12 @@ describe('shopifyProvider.validate()', () => {
       const json = JSON.stringify(err);
       const str = String(err);
       expect(json).not.toContain(SAMPLE_SECRET);
-      expect(json).not.toContain(SAMPLE_BODY);
+      // D-15 P5 WR-02: assert against the actual tampered bytes sent ('XXXXX'),
+      // NOT against SAMPLE_BODY (which the tampered buffer doesn't equal — was trivially true).
+      expect(json).not.toContain('XXXXX');
       expect(str).not.toContain(SAMPLE_SECRET);
-      // Defense-in-depth: signature bytes should also not appear (the error
-      // class never stores them — P2 D-11 structural guarantee).
+      // D-16: defense-in-depth leakage assertion for future-refactor protection.
+      expect(str).not.toContain('XXXXX');
     }
   });
 });

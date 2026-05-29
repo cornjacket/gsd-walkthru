@@ -45,7 +45,7 @@ describe('stripeProvider.validate()', () => {
     const timestamp = Math.floor(Date.now() / 1000);
     const sig = makeSignature(body, secret, timestamp);
     const req = makeReq({ body, signature: sig });
-    const result = stripeProvider.validate(req as any, secret);
+    const result = stripeProvider.validate(req as any, secret, 300);
     expect(result.provider).toBe('stripe');
     expect(result.eventId).toBe('evt_test');
     expect(result.timestamp).toBe(timestamp);
@@ -77,11 +77,11 @@ describe('stripeProvider.validate()', () => {
     const oldTimestamp = Math.floor(Date.now() / 1000) - 301;
     const sig = makeSignature(body, secret, oldTimestamp);
     const req = makeReq({ body, signature: sig });
-    expect(() => stripeProvider.validate(req as any, secret)).toThrow(
+    expect(() => stripeProvider.validate(req as any, secret, 300)).toThrow(
       WebhookValidationError
     );
     try {
-      stripeProvider.validate(req as any, secret);
+      stripeProvider.validate(req as any, secret, 300);
     } catch (err) {
       expect((err as WebhookValidationError).reason).toBe('timestamp_too_old');
     }
@@ -134,6 +134,39 @@ describe('stripeProvider.validate()', () => {
     }
   });
 
+  it('array-shaped Stripe-Signature header throws invalid_signature_format, NOT missing_header (D-12 WR-03)', () => {
+    const timestamp = Math.floor(Date.now() / 1000);
+    const req: unknown = {
+      rawBody: Buffer.from(SAMPLE_BODY),
+      headers: {
+        'stripe-signature': [`t=${timestamp},v1=abc`, `t=${timestamp},v1=def`],
+      },
+    };
+    expect(() => stripeProvider.validate(req as any, SAMPLE_SECRET)).toThrow(
+      WebhookValidationError
+    );
+    try {
+      stripeProvider.validate(req as any, SAMPLE_SECRET);
+    } catch (err) {
+      expect((err as WebhookValidationError).reason).toBe('invalid_signature_format');
+      expect((err as WebhookValidationError).reason).not.toBe('missing_header');
+      expect((err as WebhookValidationError).statusCode).toBe(401);
+    }
+  });
+
+  it('non-numeric t= value (t=1700000000xyz) throws invalid_signature_format (D-14 WR-05)', () => {
+    const req = makeReq({ body: SAMPLE_BODY, signature: 't=1700000000xyz,v1=deadbeefcafe01234567890abcdef01234567890abcdef01234567890abcdef01' });
+    expect(() => stripeProvider.validate(req as any, SAMPLE_SECRET)).toThrow(
+      WebhookValidationError
+    );
+    try {
+      stripeProvider.validate(req as any, SAMPLE_SECRET);
+    } catch (err) {
+      expect((err as WebhookValidationError).reason).toBe('invalid_signature_format');
+      expect((err as WebhookValidationError).statusCode).toBe(401);
+    }
+  });
+
   it('garbled header (no t= or v1=) throws invalid_signature_format', () => {
     const req = makeReq({ body: SAMPLE_BODY, signature: 'garbage_no_equals' });
     expect(() => stripeProvider.validate(req as any, SAMPLE_SECRET)).toThrow(
@@ -155,6 +188,7 @@ describe('stripeProvider.validate()', () => {
       body: SAMPLE_BODY,
       signature: `t=${timestamp},v0=deadbeef`,
     });
+    expect(() => stripeProvider.validate(req as any, SAMPLE_SECRET)).toThrow(WebhookValidationError);
     try {
       stripeProvider.validate(req as any, SAMPLE_SECRET);
     } catch (err) {
@@ -170,6 +204,7 @@ describe('stripeProvider.validate()', () => {
       body: SAMPLE_BODY,
       signature: `t=${timestamp},v2=deadbeef`,
     });
+    expect(() => stripeProvider.validate(req as any, SAMPLE_SECRET)).toThrow(WebhookValidationError);
     try {
       stripeProvider.validate(req as any, SAMPLE_SECRET);
     } catch (err) {
@@ -201,8 +236,9 @@ describe('stripeProvider.validate()', () => {
     const timestamp = Math.floor(Date.now() / 1000);
     const sig = makeSignature(body, secret, timestamp);
     const req = makeReq({ rawBody: Buffer.from(body), signature: sig });
+    expect(() => stripeProvider.validate(req as any, secret, 300)).toThrow(WebhookValidationError);
     try {
-      stripeProvider.validate(req as any, secret);
+      stripeProvider.validate(req as any, secret, 300);
     } catch (err) {
       expect((err as WebhookValidationError).reason).toBe('malformed_payload');
       expect((err as WebhookValidationError).statusCode).toBe(400);
@@ -247,8 +283,9 @@ describe('stripeProvider.validate()', () => {
       Math.floor(Date.now() / 1000) - 9999
     );
     const req = makeReq({ body: SAMPLE_BODY, signature: SAMPLE_SIGNATURE_VAL });
+    expect(() => stripeProvider.validate(req as any, SAMPLE_SECRET, 300)).toThrow(WebhookValidationError);
     try {
-      stripeProvider.validate(req as any, SAMPLE_SECRET);
+      stripeProvider.validate(req as any, SAMPLE_SECRET, 300);
     } catch (err) {
       const json = JSON.stringify(err);
       const str = String(err);
