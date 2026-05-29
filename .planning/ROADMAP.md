@@ -122,7 +122,7 @@ Plans:
 Plans:
 **Wave 1**
 - [x] 06-01-PLAN.md — Coverage tooling: @vitest/coverage-v8 install + vitest.config.ts coverage block + package.json script + CI coverage step
-- [ ] 06-02-PLAN.md — Integration suite: tests/integration/{stripe,github,shopify}.test.ts with both body-parser modes per provider
+- [x] 06-02-PLAN.md — Integration suite: tests/integration/{stripe,github,shopify}.test.ts with both body-parser modes per provider
 - [ ] 06-03-PLAN.md — Audit fixes: D-12..D-16 carry-over repairs across stripe.ts, middleware.ts, and provider test files
 
 **Wave 2** *(blocked on Wave 1 completion)*
@@ -150,5 +150,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 3. Body Handling & Public API Surface | 7/7 | Complete | 2026-05-07 |
 | 4. Stripe Provider | 3/3 | Complete | 2026-05-07 |
 | 5. GitHub & Shopify Providers | 2/2 | Complete | 2026-05-08 |
-| 6. Integration Tests, Coverage Gate & Negative-Case Audit | 0/TBD | Not started | - |
+| 6. Integration Tests, Coverage Gate & Negative-Case Audit | 2/4 | In Progress|  |
 | 7. Documentation & Example App | 0/TBD | Not started | - |

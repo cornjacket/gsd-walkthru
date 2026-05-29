@@ -21,8 +21,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Body Handling
 
-- [ ] **BODY-01**: Raw request body captured before any JSON parsing — middleware works whether mounted before or alongside `express.json()`
-- [ ] **BODY-02**: Documented integration pattern with `express.json({ verify: ... })` for users who want a single body parser
+- [x] **BODY-01**: Raw request body captured before any JSON parsing — middleware works whether mounted before or alongside `express.json()`
+- [x] **BODY-02**: Documented integration pattern with `express.json({ verify: ... })` for users who want a single body parser
 
 ### Stripe Provider
 
@@ -51,7 +51,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Quality
 
 - [ ] **QUAL-01**: Unit tests cover crypto utilities, error class, and each provider's signature logic
-- [ ] **QUAL-02**: Integration tests run against a real Express app via Supertest, exercising all three providers
+- [x] **QUAL-02**: Integration tests run against a real Express app via Supertest, exercising all three providers
 - [x] **QUAL-03**: Test coverage > 90% on core validation logic
 - [ ] **QUAL-04**: Tests include negative cases: tampered body, wrong secret, missing header, replay outside window (Stripe), wrong encoding (Shopify hex vs base64)
 
@@ -105,8 +105,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FOUND-04 | Phase 1 | Pending |
 | CRYP-01 | Phase 2 | Pending |
 | CRYP-02 | Phase 2 | Pending |
-| BODY-01 | Phase 3 | Pending |
-| BODY-02 | Phase 3 | Pending |
+| BODY-01 | Phase 3 | Complete |
+| BODY-02 | Phase 3 | Complete |
 | STRP-01 | Phase 4 | Pending |
 | STRP-02 | Phase 4 | Pending |
 | STRP-03 | Phase 4 | Pending |
@@ -120,7 +120,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | API-03 | Phase 3 | Pending |
 | API-04 | Phase 3 | Pending |
 | QUAL-01 | Phase 6 | Pending |
-| QUAL-02 | Phase 6 | Pending |
+| QUAL-02 | Phase 6 | Complete |
 | QUAL-03 | Phase 6 | Complete |
 | QUAL-04 | Phase 6 | Pending |
 | DOCS-01 | Phase 7 | Pending |
