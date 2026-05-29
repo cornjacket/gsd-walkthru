@@ -64,15 +64,18 @@ describe('GitHub integration — rawBodyCapture mode (BODY-01)', () => {
       .set('x-github-delivery', SAMPLE_DELIVERY)
       .send(tamperedPayload);
     expect(res.status).toBe(401);
+    expect(res.body.reason).toBe('signature_mismatch');
   });
 
-  it('missing X-Hub-Signature-256: returns 401', async () => {
+  it('missing X-Hub-Signature-256: returns 401 with reason missing_header', async () => {
+    // WR-01: assert reason, not just status (see stripe integration rationale).
     const res = await request(makeApp('rawBodyCapture'))
       .post('/webhook')
       .set('content-type', 'application/json')
       .set('x-github-delivery', SAMPLE_DELIVERY)
       .send(SAMPLE_PAYLOAD);
     expect(res.status).toBe(401);
+    expect(res.body.reason).toBe('missing_header');
   });
 });
 
@@ -99,5 +102,6 @@ describe('GitHub integration — express.json verify-callback mode (BODY-02)', (
       .set('x-github-delivery', SAMPLE_DELIVERY)
       .send(tamperedPayload);
     expect(res.status).toBe(401);
+    expect(res.body.reason).toBe('signature_mismatch');
   });
 });

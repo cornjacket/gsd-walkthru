@@ -22,7 +22,11 @@ findings:
   warning: 3
   info: 2
   total: 5
-status: issues_found
+status: resolved
+resolution:
+  resolved: [WR-01, WR-02, WR-03]
+  deferred: [IN-01, IN-02]
+  note: "WR-02 (coverage gate not enforcing) was the verifier's SC2 blocker; WR-01/WR-03 fixed in the same gap-closure commit. IN-01/IN-02 (minor test hygiene) tracked for later. See 06-VERIFICATION.md 'Gap Closure'."
 ---
 
 # Phase 6: Code Review Report

@@ -68,6 +68,7 @@ describe('Shopify integration — rawBodyCapture mode (BODY-01)', () => {
       .set('x-shopify-webhook-id', SAMPLE_WEBHOOK_ID)
       .send(tamperedPayload);
     expect(res.status).toBe(401);
+    expect(res.body.reason).toBe('signature_mismatch');
   });
 
   it('hex-encoded digest (wrong encoding): returns 401 (QUAL-04 Shopify encoding mismatch)', async () => {
@@ -80,6 +81,23 @@ describe('Shopify integration — rawBodyCapture mode (BODY-01)', () => {
       .set('x-shopify-webhook-id', SAMPLE_WEBHOOK_ID)
       .send(SAMPLE_PAYLOAD);
     expect(res.status).toBe(401);
+    // D-05: wrong encoding decodes to wrong-length bytes → signature_mismatch
+    // (NOT a widened 'invalid_encoding' reason).
+    expect(res.body.reason).toBe('signature_mismatch');
+  });
+
+  it('missing X-Shopify-Hmac-Sha256: returns 401 with reason missing_header', async () => {
+    // WR-01: Shopify previously had no missing-header integration test; add one
+    // and assert reason (not just status) to cover the missing-header guard at
+    // the integration tier.
+    const res = await request(makeApp('rawBodyCapture'))
+      .post('/webhook')
+      .set('content-type', 'application/json')
+      .set('x-shopify-topic', SAMPLE_TOPIC)
+      .set('x-shopify-webhook-id', SAMPLE_WEBHOOK_ID)
+      .send(SAMPLE_PAYLOAD);
+    expect(res.status).toBe(401);
+    expect(res.body.reason).toBe('missing_header');
   });
 });
 
@@ -109,5 +127,6 @@ describe('Shopify integration — express.json verify-callback mode (BODY-02)', 
       .set('x-shopify-webhook-id', SAMPLE_WEBHOOK_ID)
       .send(tamperedPayload);
     expect(res.status).toBe(401);
+    expect(res.body.reason).toBe('signature_mismatch');
   });
 });

@@ -247,6 +247,31 @@ describe('shopifyProvider.validate()', () => {
     expect((result as any).webhookId).toBe(SAMPLE_WEBHOOK_ID);
   });
 
+  it('array-shaped X-Shopify-Webhook-Id → webhookId === firstValue, eventId === firstValue (D-09, D-11)', () => {
+    const sig = makeSignature(SAMPLE_BODY, SAMPLE_SECRET);
+    const req = makeReq({
+      signature: sig,
+      topic: SAMPLE_TOPIC,
+      webhookId: [SAMPLE_WEBHOOK_ID, 'second-id'],
+    });
+    const result = shopifyProvider.validate(req as any, SAMPLE_SECRET);
+    expect((result as any).webhookId).toBe(SAMPLE_WEBHOOK_ID);
+    expect(result.eventId).toBe(SAMPLE_WEBHOOK_ID);
+    expect((result as any).topic).toBe(SAMPLE_TOPIC);
+  });
+
+  it("empty-array X-Shopify-Topic / X-Shopify-Webhook-Id → topic === '' and webhookId === '' (D-09 `|| ''` fallback)", () => {
+    // Exercises the `topicRaw[0] || ''` / `webhookIdRaw[0] || ''` empty-array
+    // fallthrough branches in shopify.ts (defensive against a degenerate
+    // duplicate-header array with no usable first value).
+    const sig = makeSignature(SAMPLE_BODY, SAMPLE_SECRET);
+    const req = makeReq({ signature: sig, topic: [], webhookId: [] });
+    const result = shopifyProvider.validate(req as any, SAMPLE_SECRET);
+    expect((result as any).topic).toBe('');
+    expect((result as any).webhookId).toBe('');
+    expect(result.eventId).toBe('');
+  });
+
   // ── P3 D-16, P2 D-11: leakage assertion ──────────────────────────────────
 
   it('error serializations do not contain signature, secret, or body bytes', () => {

@@ -56,7 +56,10 @@ function parseStripeSignature(header: string): { timestamp: number; v1Segments: 
         if (!isNaN(ts)) timestamp = ts;
       }
     } else if (key === 'v1') {
-      if (value && /^[0-9a-f]+$/.test(value)) {
+      // WR-03: case-insensitive hex — a proxy or future Stripe version may emit
+      // uppercase hex; Buffer.from(_, 'hex') decodes either case, so silently
+      // dropping uppercase segments would reject an otherwise-valid signature.
+      if (value && /^[0-9a-f]+$/i.test(value)) {
         v1Segments.push(value);
       }
     }

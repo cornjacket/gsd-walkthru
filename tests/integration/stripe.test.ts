@@ -64,17 +64,23 @@ describe('Stripe integration — rawBodyCapture mode (BODY-01)', () => {
       .set('stripe-signature', sig)
       .send(tamperedPayload);
     expect(res.status).toBe(401);
+    expect(res.body.reason).toBe('signature_mismatch');
   });
 
-  it('missing Stripe-Signature header: returns 401', async () => {
+  it('missing Stripe-Signature header: returns 401 with reason missing_header', async () => {
+    // WR-01: assert the reason, not just the status. Both missing_header and
+    // invalid_signature_format map to 401, so a status-only assertion cannot
+    // distinguish the missing-header guard from the array/format guard
+    // (the Mutation-3 integration-tier gap). Asserting reason closes it.
     const res = await request(makeApp('rawBodyCapture'))
       .post('/webhook')
       .set('content-type', 'application/json')
       .send(SAMPLE_PAYLOAD);
     expect(res.status).toBe(401);
+    expect(res.body.reason).toBe('missing_header');
   });
 
-  it('replay outside tolerance window: returns 401', async () => {
+  it('replay outside tolerance window: returns 401 with reason timestamp_too_old', async () => {
     const oldTimestamp = Math.floor(Date.now() / 1000) - 301;
     const sig = makeSignature(SAMPLE_PAYLOAD, SAMPLE_SECRET, oldTimestamp);
     const res = await request(makeApp('rawBodyCapture'))
@@ -83,6 +89,7 @@ describe('Stripe integration — rawBodyCapture mode (BODY-01)', () => {
       .set('stripe-signature', sig)
       .send(SAMPLE_PAYLOAD);
     expect(res.status).toBe(401);
+    expect(res.body.reason).toBe('timestamp_too_old');
   });
 });
 
@@ -109,5 +116,6 @@ describe('Stripe integration — express.json verify-callback mode (BODY-02)', (
       .set('stripe-signature', sig)
       .send(tamperedPayload);
     expect(res.status).toBe(401);
+    expect(res.body.reason).toBe('signature_mismatch');
   });
 });

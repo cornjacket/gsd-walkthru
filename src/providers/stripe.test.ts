@@ -119,6 +119,18 @@ describe('stripeProvider.validate()', () => {
     expect(result.eventId).toBe('evt_test');
   });
 
+  it('uppercase hex v1= segment is accepted (case-insensitive hex, WR-03)', () => {
+    const secret = SAMPLE_SECRET;
+    const body = SAMPLE_BODY;
+    const timestamp = Math.floor(Date.now() / 1000);
+    const sigLower = createHmac('sha256', secret).update(`${timestamp}.${body}`).digest('hex');
+    const header = `t=${timestamp},v1=${sigLower.toUpperCase()}`;
+    const req = makeReq({ body, signature: header });
+    const result = validateWithTolerance(req as any, secret, 300);
+    expect(result.provider).toBe('stripe');
+    expect(result.eventId).toBe('evt_test');
+  });
+
   // ── D-13: Negative cases ─────────────────────────────────────────────────
 
   it('missing Stripe-Signature header throws missing_header', () => {
