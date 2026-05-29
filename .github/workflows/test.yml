@@ -43,3 +43,7 @@ jobs:
 
       - name: Test (Vitest)
         run: npm test
+
+      - name: Test Coverage (Node 22 × Express 5.x)
+        if: matrix.node-version == '22.x' && matrix.express-version == '5.x'
+        run: npm run test:coverage
