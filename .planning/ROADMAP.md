@@ -121,7 +121,7 @@ Plans:
 **Plans**: 4 plans
 Plans:
 **Wave 1**
-- [ ] 06-01-PLAN.md — Coverage tooling: @vitest/coverage-v8 install + vitest.config.ts coverage block + package.json script + CI coverage step
+- [x] 06-01-PLAN.md — Coverage tooling: @vitest/coverage-v8 install + vitest.config.ts coverage block + package.json script + CI coverage step
 - [ ] 06-02-PLAN.md — Integration suite: tests/integration/{stripe,github,shopify}.test.ts with both body-parser modes per provider
 - [ ] 06-03-PLAN.md — Audit fixes: D-12..D-16 carry-over repairs across stripe.ts, middleware.ts, and provider test files
 
