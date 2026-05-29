@@ -50,10 +50,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Quality
 
-- [ ] **QUAL-01**: Unit tests cover crypto utilities, error class, and each provider's signature logic
+- [x] **QUAL-01**: Unit tests cover crypto utilities, error class, and each provider's signature logic
 - [x] **QUAL-02**: Integration tests run against a real Express app via Supertest, exercising all three providers
 - [x] **QUAL-03**: Test coverage > 90% on core validation logic
-- [ ] **QUAL-04**: Tests include negative cases: tampered body, wrong secret, missing header, replay outside window (Stripe), wrong encoding (Shopify hex vs base64)
+- [x] **QUAL-04**: Tests include negative cases: tampered body, wrong secret, missing header, replay outside window (Stripe), wrong encoding (Shopify hex vs base64)
 
 ### Documentation
 
@@ -119,10 +119,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | API-02 | Phase 2 | Pending |
 | API-03 | Phase 3 | Pending |
 | API-04 | Phase 3 | Pending |
-| QUAL-01 | Phase 6 | Pending |
+| QUAL-01 | Phase 6 | Complete |
 | QUAL-02 | Phase 6 | Complete |
 | QUAL-03 | Phase 6 | Complete |
-| QUAL-04 | Phase 6 | Pending |
+| QUAL-04 | Phase 6 | Complete |
 | DOCS-01 | Phase 7 | Pending |
 | DOCS-02 | Phase 7 | Pending |
 | DOCS-03 | Phase 7 | Pending |

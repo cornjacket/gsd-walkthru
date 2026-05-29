@@ -123,7 +123,7 @@ Plans:
 **Wave 1**
 - [x] 06-01-PLAN.md — Coverage tooling: @vitest/coverage-v8 install + vitest.config.ts coverage block + package.json script + CI coverage step
 - [x] 06-02-PLAN.md — Integration suite: tests/integration/{stripe,github,shopify}.test.ts with both body-parser modes per provider
-- [ ] 06-03-PLAN.md — Audit fixes: D-12..D-16 carry-over repairs across stripe.ts, middleware.ts, and provider test files
+- [x] 06-03-PLAN.md — Audit fixes: D-12..D-16 carry-over repairs across stripe.ts, middleware.ts, and provider test files
 
 **Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 06-04-PLAN.md — Mutation experiment: 5 sequential guard mutations + 06-VERIFICATION.md evidence table
