@@ -21,7 +21,7 @@ Build a TypeScript Express middleware library that unifies HMAC signature valida
 - [x] **Phase 3: Body Handling & Public API Surface** - Raw-body capture, the `createWebhookMiddleware` factory, full TypeScript types, and safe 401 error responses — with unit tests shipping alongside the code
 - [x] **Phase 4: Stripe Provider** - Stripe HMAC validation with timestamp tolerance window and multi-`v1=` segment support for secret rotation — with unit tests shipping alongside the code
 - [x] **Phase 5: GitHub & Shopify Providers** - GitHub SHA-256 validation and Shopify base64-encoded validation with provider metadata exposure — with unit tests shipping alongside the code
-- [ ] **Phase 6: Integration Tests, Coverage Gate & Negative-Case Audit** - Supertest integration suite across all three providers, enforced >90% coverage gate on core validation logic in CI, and an audit pass that closes any remaining negative-case gaps from Phases 2-5
+- [x] **Phase 6: Integration Tests, Coverage Gate & Negative-Case Audit** - Supertest integration suite across all three providers, enforced >90% coverage gate on core validation logic in CI, and an audit pass that closes any remaining negative-case gaps from Phases 2-5 (completed 2026-05-29)
 - [ ] **Phase 7: Documentation & Example App** - README with per-provider quickstarts and security notes, plus a runnable example Express app demonstrating all three providers
 
 ## Phase Details
@@ -126,7 +126,7 @@ Plans:
 - [x] 06-03-PLAN.md — Audit fixes: D-12..D-16 carry-over repairs across stripe.ts, middleware.ts, and provider test files
 
 **Wave 2** *(blocked on Wave 1 completion)*
-- [ ] 06-04-PLAN.md — Mutation experiment: 5 sequential guard mutations + 06-VERIFICATION.md evidence table
+- [x] 06-04-PLAN.md — Mutation experiment: 5 sequential guard mutations + 06-VERIFICATION.md evidence table
 
 ### Phase 7: Documentation & Example App
 **Goal**: A portfolio reviewer landing on the GitHub README believes this library is shippable within thirty seconds and can clone the example app to see all three providers running locally.
@@ -150,5 +150,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 3. Body Handling & Public API Surface | 7/7 | Complete | 2026-05-07 |
 | 4. Stripe Provider | 3/3 | Complete | 2026-05-07 |
 | 5. GitHub & Shopify Providers | 2/2 | Complete | 2026-05-08 |
-| 6. Integration Tests, Coverage Gate & Negative-Case Audit | 2/4 | In Progress|  |
+| 6. Integration Tests, Coverage Gate & Negative-Case Audit | 4/4 | Complete   | 2026-05-29 |
 | 7. Documentation & Example App | 0/TBD | Not started | - |

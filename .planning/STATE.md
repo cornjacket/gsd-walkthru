@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 06-03-PLAN.md
-last_updated: "2026-05-29T21:44:52.651Z"
+status: verifying
+stopped_at: Completed 06-04-PLAN.md
+last_updated: "2026-05-29T22:04:21.412Z"
 last_activity: 2026-05-29
 progress:
   total_phases: 7
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 23
-  completed_plans: 22
-  percent: 96
+  completed_plans: 23
+  percent: 100
 ---
 
 # Project State
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-05-07)
 Milestone: v1.0
 Phase: 06 (integration-tests-coverage-gate-negative-case-audit) — EXECUTING
 Plan: 4 of 4
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-05-29
 
 Progress: 5 of 7 phases complete (71%) — 16/16 plans done; Phase 05 verified passed (5/5 must-haves; 110/110 tests across 13 files; 3 advisory warnings in 05-REVIEW.md tracked for Phase 6 audit)
@@ -59,6 +59,7 @@ Progress: 5 of 7 phases complete (71%) — 16/16 plans done; Phase 05 verified p
 | Phase 06 P01 | 138 | 3 tasks | 4 files |
 | Phase 06 P02 | 3 | 2 tasks | 3 files |
 | Phase 06 P03 | 303 | 3 tasks | 6 files |
+| Phase 06 P04 | 297 | 3 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -73,6 +74,7 @@ Recent decisions affecting current work:
 - [Phase ?]: D-12: Stripe array-header three-way split closes P4 WR-03 asymmetry with github/shopify
 - [Phase ?]: D-13: Tolerance NaN/non-finite/negative throws plain Error at factory call time — mirrors P3 WR-03 precedent
 - [Phase ?]: D-15 WR-04: toleranceSeconds default removed from stripe.ts, middleware is sole 300s default source
+- [Phase ?]: Mutation 3 missing-header gap: integration test only checks HTTP 401 status; both guards return 401 so unit test is the catching tier. Documented in 06-VERIFICATION.md.
 
 ### Pending Todos
 
@@ -93,6 +95,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-05-29T21:44:52.645Z
-Stopped at: Completed 06-03-PLAN.md
+Last session: 2026-05-29T22:04:21.406Z
+Stopped at: Completed 06-04-PLAN.md
 Resume file: None
