@@ -71,6 +71,7 @@ Recent decisions affecting current work:
 ### Pending Todos
 
 - WR-06 (Phase 01) — bump `actions/checkout` and `actions/setup-node` off deprecated Node 20. See `.planning/phases/01-foundation-tooling/01-FOLLOWUP.md`. Deferred; CI green until June 2026.
+- CI-ENFORCE (Phase 01/06) — CI runs `on: push`/`pull_request` for all branches, so it **detects** failures after they land on `main` but does not **prevent** them: `main` has no branch protection, no required status checks, and no pre-push hook (`branching_strategy: none`, direct-to-main commits). The Phase 6 coverage gate inherits this — it turns the CI cell red but blocks nothing. **Deliberate scope call for a solo portfolio repo** (fast red/green signal, fix-forward) rather than an oversight; recorded so it stays a conscious choice. Closing it (deferred to v2 / on first collaborator or protected release) requires one of: GitHub branch protection + required coverage check + PR-to-merge flow, or a local pre-push hook. Out of v1.0 library scope (dev-process, not shipped functionality).
 
 ### Blockers/Concerns
 
