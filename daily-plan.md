@@ -1,20 +1,15 @@
-# Daily plan — 2026-06-01
+# Daily plan — 2026-06-02
 
-Phase 6 closed Friday — verified passed (QUAL-01..04), all work committed. Next
-session resumes at the Phase 6 → 7 boundary: an optional retroactive security
-pass on Phase 6, a progress check, then start discussing Phase 7 (Documentation
-& Example App) — the last phase of v1.0.
-
-Planned order:
-1. `/gsd-secure-phase 6`  — retroactive threat-mitigation verify (optional gate; no 06-SECURITY.md yet)
-2. `/gsd-progress`        — confirm roadmap state (6/7 phases done, Phase 7 next)
-3. `/gsd-discuss-phase 7` — gather context before planning the final phase
+Cross the Phase 6→7 boundary by **discussing** Phase 7 (Documentation & Example App)
+only. Goal for the day: land `7-CONTEXT.md` with locked decisions clear enough that
+the researcher and planner can act without re-asking. No planning or execution today —
+stop once context is captured.
 
 ```
-  [Phase 6 ✓]──► secure-phase 6 ──► progress ──► discuss-phase 7 ──►(plan→execute)
-   committed         gate            check          last phase
-   6/7 done        optional         confirm        README + example app
+Phase 6 ✅ ──► [ DISCUSS Phase 7 ] ──► 7-CONTEXT.md ──► (stop)
+                     ▲ today                 │
+                     └── plan / execute ─────┘ (later sessions)
 ```
 
 Milestone: 6 of 7 phases complete (v1.0). Phase 7 (README quickstarts + security
-notes + runnable example app) is all that remains.
+notes + runnable example app) is the last phase remaining.
