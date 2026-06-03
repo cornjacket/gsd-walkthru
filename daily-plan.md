@@ -1,15 +1,16 @@
-# Daily plan — 2026-06-02
+# Daily plan — 2026-06-03
 
-Cross the Phase 6→7 boundary by **discussing** Phase 7 (Documentation & Example App)
-only. Goal for the day: land `7-CONTEXT.md` with locked decisions clear enough that
-the researcher and planner can act without re-asking. No planning or execution today —
-stop once context is captured.
+Phase 7 context is locked (`07-CONTEXT.md`). Today moves to the **plan** macro step:
+`/gsd-plan-phase 7` — research the README/example-app implementation against the locked
+decisions, produce `PLAN.md`(s), and run the plan-checker verification loop. Stretch goal
+if planning lands clean: begin `/gsd-execute-phase 7` (README restructure + example app).
+This is the final v1.0 phase, so keep an eye on the milestone close after execution.
 
 ```
-Phase 6 ✅ ──► [ DISCUSS Phase 7 ] ──► 7-CONTEXT.md ──► (stop)
-                     ▲ today                 │
-                     └── plan / execute ─────┘ (later sessions)
+07-CONTEXT.md ✅ ──► [ PLAN Phase 7 ] ──► PLAN.md(s) ──► (stretch) EXECUTE ──► v1.0 🎉
+   (yesterday)          ▲ today                            README + example app
+                  research → plan → check
 ```
 
-Milestone: 6 of 7 phases complete (v1.0). Phase 7 (README quickstarts + security
-notes + runnable example app) is the last phase remaining.
+Milestone: 6 of 7 phases complete. Phase 7 (docs + runnable example app) is the last
+remaining; planning it today is the gate to closing v1.0.
