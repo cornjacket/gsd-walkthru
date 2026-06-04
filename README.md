@@ -2,6 +2,8 @@
 
 > **Status — v1.0 / Ready to use.** All three providers (Stripe, GitHub, Shopify) ship real HMAC-SHA256 validators. 139 tests across 16 files. Production-ready.
 
+> Curious how it's built and why? See [ARCHITECTURE.md](./ARCHITECTURE.md).
+
 ## Installation
 
 ```bash
