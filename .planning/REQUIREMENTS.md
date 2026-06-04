@@ -57,9 +57,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Documentation
 
-- [ ] **DOCS-01**: README includes installation, per-provider quickstarts, and configuration reference
-- [ ] **DOCS-02**: README includes a security notes section covering raw-body handling, timing attacks, and replay-protection caveats per provider
-- [ ] **DOCS-03**: Runnable example Express app demonstrates all three providers with mock signed payloads
+- [x] **DOCS-01**: README includes installation, per-provider quickstarts, and configuration reference
+- [x] **DOCS-02**: README includes a security notes section covering raw-body handling, timing attacks, and replay-protection caveats per provider
+- [x] **DOCS-03**: Runnable example Express app demonstrates all three providers with mock signed payloads
 
 ## v2 Requirements
 
@@ -123,9 +123,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | QUAL-02 | Phase 6 | Complete |
 | QUAL-03 | Phase 6 | Complete |
 | QUAL-04 | Phase 6 | Complete |
-| DOCS-01 | Phase 7 | Pending |
-| DOCS-02 | Phase 7 | Pending |
-| DOCS-03 | Phase 7 | Pending |
+| DOCS-01 | Phase 7 | Complete |
+| DOCS-02 | Phase 7 | Complete |
+| DOCS-03 | Phase 7 | Complete |
 
 **Coverage:**
 - v1 requirements: 27 total

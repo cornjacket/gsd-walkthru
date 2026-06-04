@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Phase 7 Plan 1 complete
-last_updated: "2026-06-04T05:35:00Z"
-last_activity: 2026-06-04 -- Phase 07 Plan 01 complete (README restructure + version bump)
+status: complete
+stopped_at: Phase 7 Plan 2 complete — v1.0 milestone done
+last_updated: "2026-06-03T22:35:00Z"
+last_activity: 2026-06-03 -- Phase 07 Plan 02 complete (example app with three-provider end-to-end demo)
 progress:
   total_phases: 7
-  completed_phases: 6
+  completed_phases: 7
   total_plans: 25
-  completed_plans: 24
-  percent: 96
+  completed_plans: 25
+  percent: 100
 ---
 
 # Project State
@@ -26,12 +26,12 @@ See: .planning/PROJECT.md (updated 2026-05-07)
 ## Current Position
 
 Milestone: v1.0
-Phase: 07 (documentation-example-app) — EXECUTING
-Plan: 2 of 2
-Status: Executing Phase 07
-Last activity: 2026-06-04 -- Phase 07 Plan 01 complete (README restructure + version bump)
+Phase: 07 (documentation-example-app) — COMPLETE
+Plan: 2 of 2 (DONE)
+Status: v1.0 milestone complete
+Last activity: 2026-06-03 -- Phase 07 Plan 02 complete (example app with three-provider end-to-end demo; 3 tasks; 6 files created; 139/139 tests green)
 
-Progress: 6 of 7 phases complete (partially) — 24/25 plans done; Phase 07 Plan 01 verified passed (2/2 tasks; 3 files modified; 139/139 tests green)
+Progress: 7 of 7 phases complete — 25/25 plans done; Phase 07 Plan 02 verified passed (3/3 tasks; 6 files created; npm start exits 0; 139/139 tests green)
 
 ## Performance Metrics
 
@@ -78,6 +78,9 @@ Recent decisions affecting current work:
 - [Phase ?]: Mutation 3 missing-header gap: integration test only checks HTTP 401 status; both guards return 401 so unit test is the catching tier. Documented in 06-VERIFICATION.md.
 - [Phase 07-01]: Version bump to 1.0.0 — library is feature-complete (139 tests, all three providers); bumped package.json and VERSION constant for narrative consistency with v1.0 README framing.
 - [Phase 07-01]: README canonical OSS shape — installation, three self-contained per-provider quickstarts, config reference table, security notes with explicit per-provider replay-protection comparison table; existing prose preserved below fold.
+- [Phase 07-02]: D-09 independence — mock senders use crypto.createHmac directly (not computeHmac) to prove validator and sender agree on signing rules without circular validation.
+- [Phase 07-02]: Shopify base64 encoding is the most common Shopify integration footgun — example app demonstrates .digest('base64') with explicit comment explaining why hex fails.
+- [Phase 07-02]: Example app TypeScript version must match library (^6.0.0) to avoid tsconfig extend incompatibility with ignoreDeprecations setting.
 
 ### Pending Todos
 
@@ -98,6 +101,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-06-04T05:35:00Z
-Stopped at: Phase 7 Plan 1 complete
-Resume file: .planning/phases/07-documentation-example-app/07-02-PLAN.md
+Last session: 2026-06-03T22:35:00Z
+Stopped at: Phase 7 Plan 2 complete — v1.0 milestone done
+Resume file: None — all plans complete
