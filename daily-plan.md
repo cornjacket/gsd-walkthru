@@ -17,3 +17,14 @@ Phase 1 ─ 2 ─ 3 ─ 4 ─ 5 ─ 6 ─ 7  ✅  v1.0 🎉
 
 Milestone: 7 of 7 phases complete. Nothing scheduled. If work resumes later, it would start
 a new milestone (e.g. npm publish, more providers) via `/gsd-new-milestone`.
+
+**One closing follow-up:** write a **project-completion post-mortem** summarizing lessons
+learned — captured from two perspectives:
+- **AI perspective:** what worked / what was friction in the GSD workflow itself (planning vs.
+  execution fidelity, verification catching real issues, subagent orchestration, false
+  positives like the test-count finding, where the process added value vs. overhead).
+- **Human perspective:** what the developer learned about driving an agentic workflow —
+  steering, trust calibration, where review effort paid off, and what to do differently next time.
+
+This is reflective documentation, not new feature work — the last artifact before the repo
+goes dormant.
