@@ -1,6 +1,6 @@
 {
   "name": "express-webhook-validator",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Express middleware for unified HMAC webhook signature validation (Stripe, GitHub, Shopify)",
   "type": "module",
   "main": "./dist/index.cjs",

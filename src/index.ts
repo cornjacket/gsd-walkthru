@@ -3,7 +3,7 @@
 // middleware factory, raw-body capture, per-provider types, opt-in
 // error handler, and side-effect provider registration (D-03, D-19).
 
-export const VERSION = '0.0.1';
+export const VERSION = '1.0.0';
 
 export { timingSafeCompare } from './crypto/compare.js';
 export { computeHmac } from './crypto/hmac.js';
