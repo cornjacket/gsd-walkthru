@@ -136,7 +136,11 @@ Plans:
   1. The README opens with installation and per-provider quickstarts (Stripe, GitHub, Shopify) showing one-line middleware mounting and a complete configuration reference.
   2. The README includes a security notes section that explicitly covers raw-body handling, constant-time comparison, and the per-provider replay-protection landscape (Stripe timestamp window vs. GitHub/Shopify dedup gap with guidance).
   3. A runnable example Express app under `examples/` boots locally, accepts mock signed payloads for all three providers, and prints the validated `req.webhook` payload to stdout.
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+**Wave 1** *(both plans are parallel — no file overlap)*
+- [ ] 07-01-PLAN.md — README restructure (D-01..D-06): installation, per-provider quickstarts, config reference table, security notes + package.json/src/index.ts version bump to 1.0.0
+- [ ] 07-02-PLAN.md — Example app scaffold (D-07..D-09): package.json, tsconfig.json, server + three independent mock senders (independent crypto per D-09) + end-to-end `npm start` verification
 
 ## Progress
 
@@ -151,4 +155,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 4. Stripe Provider | 3/3 | Complete | 2026-05-07 |
 | 5. GitHub & Shopify Providers | 2/2 | Complete | 2026-05-08 |
 | 6. Integration Tests, Coverage Gate & Negative-Case Audit | 4/4 | Complete   | 2026-05-29 |
-| 7. Documentation & Example App | 0/TBD | Not started | - |
+| 7. Documentation & Example App | 0/2 | Not started | - |
