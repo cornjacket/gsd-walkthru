@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 7 context gathered
-last_updated: "2026-06-04T04:58:08.086Z"
-last_activity: 2026-06-04 -- Phase 7 planning complete
+stopped_at: Phase 7 Plan 1 complete
+last_updated: "2026-06-04T05:35:00Z"
+last_activity: 2026-06-04 -- Phase 07 Plan 01 complete (README restructure + version bump)
 progress:
   total_phases: 7
   completed_phases: 6
   total_plans: 25
-  completed_plans: 23
-  percent: 92
+  completed_plans: 24
+  percent: 96
 ---
 
 # Project State
@@ -21,17 +21,17 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-07)
 
 **Core value:** A backend developer integrating any supported webhook provider can validate signatures correctly with one line of middleware — with replay protection where the provider supports it, and documented honesty about where it doesn't.
-**Current focus:** Phase 06 — integration-tests-coverage-gate-negative-case-audit
+**Current focus:** Phase 07 — documentation-example-app
 
 ## Current Position
 
 Milestone: v1.0
-Phase: 07
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-06-04 -- Phase 7 planning complete
+Phase: 07 (documentation-example-app) — EXECUTING
+Plan: 2 of 2
+Status: Executing Phase 07
+Last activity: 2026-06-04 -- Phase 07 Plan 01 complete (README restructure + version bump)
 
-Progress: 5 of 7 phases complete (71%) — 16/16 plans done; Phase 05 verified passed (5/5 must-haves; 110/110 tests across 13 files; 3 advisory warnings in 05-REVIEW.md tracked for Phase 6 audit)
+Progress: 6 of 7 phases complete (partially) — 24/25 plans done; Phase 07 Plan 01 verified passed (2/2 tasks; 3 files modified; 139/139 tests green)
 
 ## Performance Metrics
 
@@ -76,6 +76,8 @@ Recent decisions affecting current work:
 - [Phase ?]: D-13: Tolerance NaN/non-finite/negative throws plain Error at factory call time — mirrors P3 WR-03 precedent
 - [Phase ?]: D-15 WR-04: toleranceSeconds default removed from stripe.ts, middleware is sole 300s default source
 - [Phase ?]: Mutation 3 missing-header gap: integration test only checks HTTP 401 status; both guards return 401 so unit test is the catching tier. Documented in 06-VERIFICATION.md.
+- [Phase 07-01]: Version bump to 1.0.0 — library is feature-complete (139 tests, all three providers); bumped package.json and VERSION constant for narrative consistency with v1.0 README framing.
+- [Phase 07-01]: README canonical OSS shape — installation, three self-contained per-provider quickstarts, config reference table, security notes with explicit per-provider replay-protection comparison table; existing prose preserved below fold.
 
 ### Pending Todos
 
@@ -96,6 +98,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-06-03T06:24:30.592Z
-Stopped at: Phase 7 context gathered
-Resume file: .planning/phases/07-documentation-example-app/07-CONTEXT.md
+Last session: 2026-06-04T05:35:00Z
+Stopped at: Phase 7 Plan 1 complete
+Resume file: .planning/phases/07-documentation-example-app/07-02-PLAN.md

@@ -139,7 +139,7 @@ Plans:
 **Plans**: 2 plans
 Plans:
 **Wave 1** *(both plans are parallel — no file overlap)*
-- [ ] 07-01-PLAN.md — README restructure (D-01..D-06): installation, per-provider quickstarts, config reference table, security notes + package.json/src/index.ts version bump to 1.0.0
+- [x] 07-01-PLAN.md — README restructure (D-01..D-06): installation, per-provider quickstarts, config reference table, security notes + package.json/src/index.ts version bump to 1.0.0 (completed 2026-06-04)
 - [ ] 07-02-PLAN.md — Example app scaffold (D-07..D-09): package.json, tsconfig.json, server + three independent mock senders (independent crypto per D-09) + end-to-end `npm start` verification
 
 ## Progress
@@ -155,4 +155,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 4. Stripe Provider | 3/3 | Complete | 2026-05-07 |
 | 5. GitHub & Shopify Providers | 2/2 | Complete | 2026-05-08 |
 | 6. Integration Tests, Coverage Gate & Negative-Case Audit | 4/4 | Complete   | 2026-05-29 |
-| 7. Documentation & Example App | 0/2 | Not started | - |
+| 7. Documentation & Example App | 1/2 | In Progress | - |
