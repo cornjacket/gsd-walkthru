@@ -1,8 +1,146 @@
 # express-webhook-validator
 
-Express middleware for unified Hash-based Message Authentication Code (HMAC) webhook signature validation across **Stripe**, **GitHub**, and **Shopify**.
+> **Status — v1.0 / Ready to use.** All three providers (Stripe, GitHub, Shopify) ship real HMAC-SHA256 validators. 139 tests across 16 files. Production-ready.
 
-> **Status — v0.0.1 (in development).** Phase 3 of 7 complete: public API surface, raw-body capture, error class, opt-in error handler, and provider registry are shipped and tested. Per-provider signature verification (Stripe in Phase 4; GitHub & Shopify in Phase 5) is currently stubbed — calling `validate()` on a real provider throws `... not yet implemented`. The shape of the consumer API is stable; what's pending is the crypto inside each provider's `validate()`.
+## Installation
+
+```bash
+npm install express-webhook-validator
+```
+
+> **Note:** This package is not yet published to npm — a public release is a future step. To use it now, clone the repository and reference it with a local [`file:` dependency](https://docs.npmjs.com/cli/v10/configuring-npm/package-json#local-paths) (see the [example app](./examples/example-app/)).
+
+## Quickstart
+
+### Stripe
+
+```typescript
+import express from 'express';
+import {
+  createWebhookMiddleware,
+  rawBodyCapture,
+  webhookErrorHandler,
+} from 'express-webhook-validator';
+
+const app = express();
+
+// rawBodyCapture() MUST come before createWebhookMiddleware()
+app.post(
+  '/webhooks/stripe',
+  rawBodyCapture(),
+  createWebhookMiddleware('stripe', {
+    secret: process.env.STRIPE_WEBHOOK_SECRET!,
+    tolerance: 300, // default: 5-minute replay window; lower = stricter
+  }),
+  (req, res) => {
+    if (req.webhook?.provider === 'stripe') {
+      console.log('Stripe event:', req.webhook.eventId, req.webhook.parsed);
+    }
+    res.sendStatus(200);
+  }
+);
+
+app.use(webhookErrorHandler());
+app.listen(3000);
+```
+
+### GitHub
+
+```typescript
+import express from 'express';
+import {
+  createWebhookMiddleware,
+  rawBodyCapture,
+  webhookErrorHandler,
+} from 'express-webhook-validator';
+
+const app = express();
+
+app.post(
+  '/webhooks/github',
+  rawBodyCapture(),
+  createWebhookMiddleware('github', {
+    secret: process.env.GITHUB_WEBHOOK_SECRET!,
+    // tolerance is ignored for GitHub (no signed timestamp)
+  }),
+  (req, res) => {
+    if (req.webhook?.provider === 'github') {
+      console.log('GitHub delivery:', req.webhook.deliveryId, req.webhook.parsed);
+      // Use req.webhook.deliveryId in your own dedup store to block replays
+    }
+    res.sendStatus(200);
+  }
+);
+
+app.use(webhookErrorHandler());
+app.listen(3000);
+```
+
+### Shopify
+
+```typescript
+import express from 'express';
+import {
+  createWebhookMiddleware,
+  rawBodyCapture,
+  webhookErrorHandler,
+} from 'express-webhook-validator';
+
+const app = express();
+
+app.post(
+  '/webhooks/shopify',
+  rawBodyCapture(),
+  createWebhookMiddleware('shopify', {
+    secret: process.env.SHOPIFY_WEBHOOK_SECRET!,
+    // tolerance is ignored for Shopify (no signed timestamp)
+  }),
+  (req, res) => {
+    if (req.webhook?.provider === 'shopify') {
+      console.log('Shopify topic:', req.webhook.topic, '| ID:', req.webhook.webhookId);
+      // Use req.webhook.webhookId in your own dedup store to block replays
+    }
+    res.sendStatus(200);
+  }
+);
+
+app.use(webhookErrorHandler());
+app.listen(3000);
+```
+
+## Configuration Reference
+
+All configuration is passed at factory call time — no global state.
+
+| Export | Option | Type / Default | Description |
+|--------|--------|----------------|-------------|
+| `createWebhookMiddleware(provider, options)` | `secret` | `string` — **required** | Webhook signing secret from your provider dashboard. Must be non-empty. |
+| | `tolerance` | `number` (seconds) — `300` | **Stripe only.** Timestamp tolerance window in seconds. Requests with `t=` outside this window are rejected with `reason: 'timestamp_too_old'`. GitHub and Shopify ignore this value. |
+| `rawBodyCapture(options?)` | `limit` | `string \| number` — `'1mb'` | Maximum raw request body size. Bodies exceeding the limit are rejected with HTTP 413. Parsed by the [`bytes`](https://www.npmjs.com/package/bytes) package (e.g. `'512kb'`, `2097152`). |
+| `captureRawBody(req, res, buf, encoding)` | — | verify callback | Drop-in `verify` callback for `express.json({ verify: captureRawBody })`. Captures raw bytes at `req.rawBody`. Alternative to `rawBodyCapture()` when you want a single body parser on the route. |
+| `webhookErrorHandler()` | — | 4-arg error middleware | Mounts as an Express error handler. Detects `WebhookValidationError` instances and responds with `{ error: 'webhook validation failed', reason: '...' }` JSON at the appropriate HTTP status. Passes non-matching errors through to your pipeline. |
+
+## Security Notes
+
+### Raw-body handling
+
+`express.json()` discards the original bytes; the library's `rawBodyCapture()` (or `express.json({ verify: captureRawBody })`) stashes the raw Buffer at `req.rawBody` before parsing. The HMAC is computed over those exact bytes. Mount `rawBodyCapture()` per-route before `createWebhookMiddleware()`, never globally.
+
+### Constant-time comparison
+
+Signature comparison uses Node's `crypto.timingSafeEqual` (via the exported `timingSafeCompare`). A naive string `===` comparison leaks timing information about how many bytes matched — a known side-channel for HMAC-based auth. Length-mismatch (different-length digests) returns `false` without invoking `timingSafeEqual`.
+
+### Replay protection — per-provider landscape
+
+| Provider | Signed Timestamp? | Built-in Replay Defense | Consumer Action Required |
+|----------|-------------------|------------------------|--------------------------|
+| Stripe | Yes — `t=<unix>` in header | 5-minute tolerance window (configurable via `tolerance` option) | None by default; lower `tolerance` if stricter window needed |
+| GitHub | No | None in the library | Implement dedup store (Redis, DB) keyed on `req.webhook.deliveryId` (`X-GitHub-Delivery` UUID) |
+| Shopify | No | None in the library | Implement dedup store (Redis, DB) keyed on `req.webhook.webhookId` (`X-Shopify-Webhook-Id` UUID) |
+
+GitHub and Shopify each provide a unique delivery/webhook ID per event — `req.webhook.deliveryId` and `req.webhook.webhookId` respectively. The library surfaces these on `req.webhook` for you to implement a dedup store. A built-in store is explicitly out of scope: stateful dedup belongs in your application, not a pure validation middleware.
+
+---
 
 ## What this is
 
@@ -171,7 +309,7 @@ Three contracts make this layout work:
 - **`WebhookValidationError` carries no sensitive data structurally.** No `cause`, no `details`, no `message` parameter — the message is auto-derived from `reason` + `provider`. `toJSON()` whitelists what gets serialized. Even a future maintainer adding a private field can't accidentally leak signature/secret/body bytes through the standard serialization path.
 - **The library never logs.** Zero `console.*` calls. Logging is the consumer's choice and lives in the consumer's middleware.
 
-## Quick example
+## Alternative mounting pattern
 
 ```ts
 import express from 'express';
