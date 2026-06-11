@@ -51,7 +51,7 @@ Every commit MUST follow this shape:
 
 2. **Header carries the date.** The first line MUST be `# Daily plan — YYYY-MM-DD`, where the date is the day the plan is *for*. The aggregator parses this to detect stale plans; an unparseable header is treated as stale.
 
-3. **Body is a 100-ft view.** One short paragraph or list of intent, plus a small ASCII diagram (timeline, flow, milestones) that conveys the shape of the day at a glance. Don't write granular tasks — your commit history records granularity after the fact.
+3. **Body is a 100-ft view, written as a bullet list.** Capture the day's intent as a short bullet list (a handful of bullets, not a wall of prose), plus a small ASCII diagram (timeline, flow, milestones) that conveys the shape of the day at a glance. Each bullet is one scannable line of intent. Don't write a dense paragraph — the aggregated `daily-plan-summary.md` is meant to be skimmed in seconds. Don't write granular tasks either — your commit history records granularity after the fact.
 
 4. **Forward-write rule.** Overwrite `daily-plan.md` with the next working day's plan **only when the user explicitly asks to plan tomorrow** — e.g., "write tomorrow's plan", "set up tomorrow", or an end-of-day signoff that includes a forward-planning intent. Do NOT auto-trigger on ambiguous "let's stop here" or "good for today" signoffs — wait for an explicit forward-planning ask. If today is Friday, write Monday's plan (the aggregator's weekend tolerance keeps the Friday-written-on-Friday plan valid through the weekend; Monday's plan is what's needed for Monday).
 
